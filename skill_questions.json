@@ -1,0 +1,453 @@
+{
+  "Python": {
+    "category": "Programming Language",
+    "question": "So sánh list, tuple, và dictionary trong Python. Khi nào nên dùng từng loại? Giải thích về performance và use cases.",
+    "evaluation_criteria": [
+      "Hiểu mutability vs immutability",
+      "Performance characteristics (access time, memory)",
+      "Use cases phù hợp cho từng loại",
+      "Trade-offs khi chọn data structure"
+    ]
+  },
+
+  "Java": {
+    "category": "Programming Language",
+    "question": "Giải thích garbage collection trong Java. Tại sao cần GC và có những loại GC nào? Trade-offs của mỗi loại.",
+    "evaluation_criteria": [
+      "Hiểu memory management",
+      "Các loại GC (Serial, Parallel, G1, ZGC)",
+      "STW (Stop-The-World) pause",
+      "Trade-off throughput vs latency"
+    ]
+  },
+
+  "JavaScript": {
+    "category": "Programming Language",
+    "question": "Giải thích event loop trong JavaScript. Sự khác biệt giữa synchronous, asynchronous, Promise, và async/await.",
+    "evaluation_criteria": [
+      "Hiểu single-threaded nature",
+      "Call stack, callback queue, event loop",
+      "Promise vs callback",
+      "Async/await syntax và error handling"
+    ]
+  },
+
+  "TypeScript": {
+    "category": "Programming Language",
+    "question": "Tại sao dùng TypeScript thay vì JavaScript? So sánh type safety, developer experience, và trade-offs.",
+    "evaluation_criteria": [
+      "Type safety benefits",
+      "Compile-time vs runtime errors",
+      "Developer tooling (autocomplete, refactoring)",
+      "Trade-off: learning curve, build step, bundle size"
+    ]
+  },
+
+  "C#": {
+    "category": "Programming Language",
+    "question": "So sánh class vs struct trong C#. Khi nào dùng reference type vs value type? Giải thích về memory allocation.",
+    "evaluation_criteria": [
+      "Reference type vs value type",
+      "Stack vs heap allocation",
+      "Performance implications",
+      "Use cases cho mỗi loại"
+    ]
+  },
+
+  "Go": {
+    "category": "Programming Language",
+    "question": "Goroutines và channels trong Go hoạt động như thế nào? So sánh với threading truyền thống.",
+    "evaluation_criteria": [
+      "Lightweight threads concept",
+      "Channel communication",
+      "Concurrency vs parallelism",
+      "Trade-offs với traditional threads"
+    ]
+  },
+
+  "SQL": {
+    "category": "Database",
+    "question": "Thiết kế database schema cho blog platform (users, posts, comments, tags). Giải thích normalization và indexing strategy.",
+    "evaluation_criteria": [
+      "Table relationships (foreign keys)",
+      "Normalization (3NF)",
+      "Index trên columns nào và tại sao",
+      "Query performance considerations"
+    ]
+  },
+
+  "SQL Analytics": {
+    "category": "Data/AI",
+    "question": "Bạn cần phân tích dữ liệu sales từ bảng có 10M records. Viết SQL query để tính revenue theo tháng, top products, và growth rate. Giải thích về window functions và performance optimization.",
+    "evaluation_criteria": [
+      "Window functions (ROW_NUMBER, RANK, LAG/LEAD)",
+      "Aggregations (SUM, AVG, COUNT) với GROUP BY",
+      "CTEs (Common Table Expressions) để organize complex queries",
+      "Index strategy cho analytical queries",
+      "Trade-off: Real-time vs batch processing"
+    ]
+  },
+
+  "MongoDB": {
+    "category": "Database",
+    "question": "So sánh MongoDB với SQL databases. Khi nào nên dùng NoSQL? Giải thích về schema design trong MongoDB.",
+    "evaluation_criteria": [
+      "Document model vs relational",
+      "Schema flexibility vs consistency",
+      "Embedding vs referencing",
+      "Use cases phù hợp (read-heavy, flexible schema)"
+    ]
+  },
+
+  "Redis": {
+    "category": "Database",
+    "question": "Redis dùng làm cache như thế nào? Giải thích cache strategies (cache-aside, write-through) và expiration policies.",
+    "evaluation_criteria": [
+      "In-memory storage benefits",
+      "Caching patterns",
+      "TTL và eviction policies",
+      "Trade-off memory vs persistence"
+    ]
+  },
+
+  "PostgreSQL": {
+    "category": "Database",
+    "question": "So sánh PostgreSQL với MySQL. Những features đặc biệt của PostgreSQL (JSONB, advanced indexing) và use cases.",
+    "evaluation_criteria": [
+      "Feature comparison",
+      "JSONB và JSON operators",
+      "Advanced index types (GIN, GiST)",
+      "Use cases phù hợp"
+    ]
+  },
+
+  "React": {
+    "category": "Frontend",
+    "question": "Giải thích component lifecycle và hooks trong React. So sánh class components vs functional components với hooks.",
+    "evaluation_criteria": [
+      "Component mounting, updating, unmounting",
+      "useState, useEffect hooks",
+      "Dependency array",
+      "Trade-off class vs functional components"
+    ]
+  },
+
+  "Vue.js": {
+    "category": "Frontend",
+    "question": "Reactivity system trong Vue.js hoạt động như thế nào? So sánh Options API vs Composition API.",
+    "evaluation_criteria": [
+      "Reactive data binding",
+      "Virtual DOM",
+      "Options API vs Composition API",
+      "Use cases cho mỗi API style"
+    ]
+  },
+
+  "Angular": {
+    "category": "Frontend",
+    "question": "Dependency Injection trong Angular là gì? Giải thích về modules, components, và services architecture.",
+    "evaluation_criteria": [
+      "DI pattern",
+      "Module organization",
+      "Component hierarchy",
+      "Services và singleton pattern"
+    ]
+  },
+
+  "HTML/CSS": {
+    "category": "Frontend",
+    "question": "Thiết kế responsive layout. Giải thích Flexbox vs Grid, media queries, và mobile-first approach.",
+    "evaluation_criteria": [
+      "Flexbox vs Grid use cases",
+      "Responsive breakpoints",
+      "Mobile-first strategy",
+      "Performance considerations"
+    ]
+  },
+
+  "Django": {
+    "category": "Backend Framework",
+    "question": "Django ORM hoạt động như thế nào? Giải thích về models, migrations, và query optimization (N+1 problem).",
+    "evaluation_criteria": [
+      "ORM basics",
+      "Database migrations",
+      "N+1 query problem",
+      "select_related và prefetch_related"
+    ]
+  },
+
+  "Flask": {
+    "category": "Backend Framework",
+    "question": "So sánh Flask vs Django. Khi nào nên dùng micro-framework vs full-stack framework? Trade-offs.",
+    "evaluation_criteria": [
+      "Micro-framework philosophy",
+      "Flexibility vs batteries-included",
+      "Learning curve",
+      "Use cases phù hợp"
+    ]
+  },
+
+  "Spring Boot": {
+    "category": "Backend Framework",
+    "question": "Dependency Injection và IoC container trong Spring Boot. Giải thích về beans và application context.",
+    "evaluation_criteria": [
+      "DI pattern",
+      "IoC container",
+      "Bean lifecycle",
+      "Configuration approaches (annotations vs XML)"
+    ]
+  },
+
+  "Express.js": {
+    "category": "Backend Framework",
+    "question": "Middleware trong Express.js hoạt động như thế nào? Giải thích request-response cycle và error handling.",
+    "evaluation_criteria": [
+      "Middleware chain",
+      "Request/response objects",
+      "Error handling middleware",
+      "Async error handling"
+    ]
+  },
+
+  "Node.js": {
+    "category": "Backend Framework",
+    "question": "Event-driven architecture trong Node.js. Khi nào Node.js phù hợp và không phù hợp? Giải thích về non-blocking I/O.",
+    "evaluation_criteria": [
+      "Event loop và non-blocking I/O",
+      "I/O-bound vs CPU-bound tasks",
+      "Use cases (APIs, real-time apps)",
+      "Limitations (CPU-intensive tasks)"
+    ]
+  },
+
+  "Docker": {
+    "category": "DevOps",
+    "question": "Dockerfile best practices. Giải thích về layers, caching, và multi-stage builds. Tại sao cần optimize image size?",
+    "evaluation_criteria": [
+      "Layer caching mechanism",
+      "Multi-stage builds",
+      "Base image selection",
+      "Trade-off size vs functionality"
+    ]
+  },
+
+  "Kubernetes": {
+    "category": "DevOps",
+    "question": "Kubernetes pods, deployments, và services là gì? Giải thích về container orchestration và scaling.",
+    "evaluation_criteria": [
+      "Pod concept",
+      "Deployment vs StatefulSet",
+      "Service types (ClusterIP, NodePort, LoadBalancer)",
+      "Auto-scaling"
+    ]
+  },
+
+  "Git": {
+    "category": "Tools",
+    "question": "Git branching strategies. So sánh Git Flow, GitHub Flow, và trunk-based development. Khi nào dùng rebase vs merge?",
+    "evaluation_criteria": [
+      "Branching models",
+      "Merge vs rebase trade-offs",
+      "Conflict resolution",
+      "Team collaboration best practices"
+    ]
+  },
+
+  "REST API": {
+    "category": "Tools",
+    "question": "Thiết kế RESTful API. Giải thích về HTTP methods, status codes, và API versioning strategies.",
+    "evaluation_criteria": [
+      "REST principles",
+      "Proper HTTP method usage",
+      "Status codes (2xx, 4xx, 5xx)",
+      "Versioning (URL, header, content negotiation)"
+    ]
+  },
+
+  "GraphQL": {
+    "category": "Tools",
+    "question": "So sánh GraphQL vs REST API. Ưu nhược điểm của mỗi approach và khi nào nên dùng GraphQL.",
+    "evaluation_criteria": [
+      "Query flexibility",
+      "Over-fetching vs under-fetching",
+      "N+1 problem trong GraphQL",
+      "Trade-offs (complexity, caching, tooling)"
+    ]
+  },
+
+  "AWS": {
+    "category": "Cloud",
+    "question": "So sánh EC2, Lambda, và ECS/EKS. Khi nào dùng từng service? Giải thích về pricing model.",
+    "evaluation_criteria": [
+      "Compute options comparison",
+      "Serverless vs containers vs VMs",
+      "Cost implications",
+      "Use cases phù hợp"
+    ]
+  },
+
+  "Azure": {
+    "category": "Cloud",
+    "question": "Azure App Service vs Azure Functions. Khi nào dùng PaaS vs serverless? Trade-offs về control và cost.",
+    "evaluation_criteria": [
+      "PaaS vs serverless",
+      "Scaling characteristics",
+      "Cost model",
+      "Use cases"
+    ]
+  },
+
+  "CI/CD": {
+    "category": "DevOps",
+    "question": "Thiết kế CI/CD pipeline. Giải thích các stages (build, test, deploy) và automated testing strategy.",
+    "evaluation_criteria": [
+      "Pipeline stages",
+      "Automated testing (unit, integration, e2e)",
+      "Deployment strategies (blue-green, canary)",
+      "Rollback mechanisms"
+    ]
+  },
+
+  "Linux": {
+    "category": "Tools",
+    "question": "Các lệnh Linux thông dụng để debug production issues. Giải thích về processes, logs, và resource monitoring.",
+    "evaluation_criteria": [
+      "Process management (ps, top, htop)",
+      "Log analysis (grep, tail, less)",
+      "Resource monitoring (df, du, free)",
+      "Network debugging (netstat, curl)"
+    ]
+  },
+
+  "Testing": {
+    "category": "Tools",
+    "question": "Testing pyramid. So sánh unit tests, integration tests, và e2e tests. Test coverage strategy.",
+    "evaluation_criteria": [
+      "Testing levels",
+      "Unit vs integration vs e2e",
+      "Code coverage targets",
+      "Trade-off speed vs confidence"
+    ]
+  },
+
+  "Microservices": {
+    "category": "Architecture",
+    "question": "So sánh monolithic vs microservices architecture. Khi nào nên migrate sang microservices? Trade-offs.",
+    "evaluation_criteria": [
+      "Architectural differences",
+      "Independent deployment",
+      "Complexity vs scalability",
+      "When NOT to use microservices"
+    ]
+  },
+
+  "System Design": {
+    "category": "Architecture",
+    "question": "Thiết kế URL shortener (như bit.ly). Mô tả database schema, API endpoints, và scaling strategy.",
+    "evaluation_criteria": [
+      "Unique ID generation",
+      "Database design",
+      "API design",
+      "Caching và scaling"
+    ]
+  },
+
+  "Security": {
+    "category": "Security",
+    "question": "Common web vulnerabilities (OWASP Top 10). Giải thích SQL injection, XSS, CSRF và cách phòng chống.",
+    "evaluation_criteria": [
+      "Attack vectors",
+      "Prevention techniques",
+      "Input validation",
+      "Security best practices"
+    ]
+  },
+
+  "Machine Learning": {
+    "category": "Data/AI",
+    "question": "Overfitting vs underfitting trong ML. Làm thế nào để detect và giải quyết? Giải thích về regularization.",
+    "evaluation_criteria": [
+      "Bias-variance tradeoff",
+      "Detection methods (learning curves)",
+      "Regularization techniques (L1, L2, dropout)",
+      "Cross-validation"
+    ]
+  },
+
+  "Data Structures": {
+    "category": "Computer Science",
+    "question": "So sánh Array, Linked List, Hash Table, và Tree. Time complexity của các operations và use cases.",
+    "evaluation_criteria": [
+      "Time/space complexity (Big O)",
+      "Access, insert, delete operations",
+      "Trade-offs (memory vs speed)",
+      "Use cases phù hợp"
+    ]
+  },
+
+  "Algorithms": {
+    "category": "Computer Science",
+    "question": "Sorting algorithms phổ biến. So sánh quicksort, mergesort, và heapsort. Time/space complexity và stability.",
+    "evaluation_criteria": [
+      "Algorithm comparison",
+      "Time complexity (best, average, worst)",
+      "Space complexity",
+      "Stability consideration"
+    ]
+  },
+
+  "OOP": {
+    "category": "Programming Paradigm",
+    "question": "4 principles của OOP (Encapsulation, Abstraction, Inheritance, Polymorphism). Giải thích và cho examples.",
+    "evaluation_criteria": [
+      "Encapsulation (data hiding)",
+      "Abstraction (hide complexity)",
+      "Inheritance (code reuse)",
+      "Polymorphism (method overriding/overloading)"
+    ]
+  },
+
+  "Design Patterns": {
+    "category": "Software Engineering",
+    "question": "Design patterns thông dụng (Singleton, Factory, Observer). Khi nào dùng và trade-offs.",
+    "evaluation_criteria": [
+      "Pattern purposes",
+      "Implementation examples",
+      "Use cases",
+      "Trade-offs (complexity vs flexibility)"
+    ]
+  },
+
+  "Agile/Scrum": {
+    "category": "Methodology",
+    "question": "Agile methodology là gì? Giải thích Scrum ceremonies (sprint planning, daily standup, retro) và roles.",
+    "evaluation_criteria": [
+      "Agile principles",
+      "Scrum framework",
+      "Ceremonies và purposes",
+      "Team roles"
+    ]
+  },
+
+  "Firebase": {
+    "category": "Backend Service",
+    "question": "Firebase Realtime Database vs Firestore. Khi nào dùng Firebase thay vì traditional backend? Trade-offs.",
+    "evaluation_criteria": [
+      "Realtime sync",
+      "NoSQL structure",
+      "BaaS vs traditional backend",
+      "Trade-offs (vendor lock-in, cost, control)"
+    ]
+  },
+
+  "Elasticsearch": {
+    "category": "Search Engine",
+    "question": "Elasticsearch dùng để làm gì? Giải thích về full-text search, inverted index, và aggregations.",
+    "evaluation_criteria": [
+      "Full-text search",
+      "Inverted index concept",
+      "Aggregations",
+      "Use cases (logs, search, analytics)"
+    ]
+  }
+}
