@@ -42,6 +42,12 @@ def get_job_detail(job_url, headers):
     """
     try:
         time.sleep(2)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            "Accept-Language": "vi-VN,vi;q=0.9,en;q=0.8",
+            "Referer": "https://www.google.com/"
+        }
+
         response = requests.get(job_url, headers=headers, timeout=10)
         response.raise_for_status()
         
