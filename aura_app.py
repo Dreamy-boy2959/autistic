@@ -21,7 +21,7 @@ CLAUDE_MODEL = os.getenv('CLAUDE_MODEL', 'claude-sonnet-4-20250514')
 GROQ_API_KEY = os.getenv('GROQ_API_KEY', '')  # Free alternative!
 USE_AI_EVALUATION = os.getenv('USE_AI_EVALUATION', 'true').lower() == 'true'
 AI_PROVIDER = os.getenv('AI_PROVIDER', 'groq')  # 'claude' or 'groq'
-USE_AI_SKILL_ANALYSIS = os.getenv('USE_AI_SKILL_ANALYSIS', 'true').lower() == 'true'
+
 # Debug info
 print("="*60)
 print("🔧 AURA CONFIGURATION:")
@@ -35,36 +35,50 @@ else:
 print("="*60)
 print()
 
-def get_job_detail(job_url, headers):
+def get_job_detail(job_url, session):
     """
-    Fetch detailed job description from job detail page
-    Only return first 2 sections (Mô tả công việc & Yêu cầu ứng viên)
+    Fetch job description from ITviec job detail page
+    Uses session to maintain cookies
     """
     try:
-        time.sleep(2)
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-            "Accept-Language": "vi-VN,vi;q=0.9,en;q=0.8",
-            "Referer": "https://www.google.com/"
-        }
-
-        response = requests.get(job_url, headers=headers, timeout=10)
+        time.sleep(0.8)
+        response = session.get(job_url, timeout=15)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.content, 'html.parser')
-        description_items = soup.find_all('div', class_='job-description__item')
         
         job_descriptions = []
-        for item in description_items[:2]:
-            heading = item.find(['h3', 'h4', 'strong'])
-            heading_text = heading.get_text(strip=True) if heading else ""
-            content = item.get_text(separator='\n', strip=True)
-            
+        
+        # ITviec job description selectors
+        content_selectors = [
+            'div.job-description',
+            'div#job-description',
+            'div.job-details',
+            'div[class*="description"]',
+            'div.content'
+        ]
+        
+        content = None
+        for selector in content_selectors:
+            content = soup.select_one(selector)
             if content:
-                job_descriptions.append({
-                    'heading': heading_text,
-                    'content': content
-                })
+                break
+        
+        if content:
+            job_descriptions.append({
+                'heading': 'Job Description',
+                'content': content.get_text(separator='\n', strip=True)
+            })
+        else:
+            # Fallback: grab all meaningful text sections
+            for tag in soup.find_all(['div', 'section'], class_=re.compile(r'job|desc|require|content', re.I)):
+                text = tag.get_text(separator='\n', strip=True)
+                if len(text) > 100:
+                    job_descriptions.append({
+                        'heading': '',
+                        'content': text
+                    })
+                    break
         
         return job_descriptions
         
@@ -72,202 +86,160 @@ def get_job_detail(job_url, headers):
         print(f"Error fetching job detail: {str(e)}")
         return []
 
-def scrape_topcv_jobs(job_title, max_results=15):
+def fetch_vietnamworks_detail(job_id):
     """
-    Scrape job descriptions from TopCV based on job title
+    Fetch full job description from VietnamWorks job detail API
+    """
+    try:
+        time.sleep(0.3)
+        response = requests.get(
+            f'https://ms.vietnamworks.com/job-search/v1.0/jobs/{job_id}',
+            headers={
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'User-Agent': 'Mozilla/5.0',
+            },
+            timeout=10
+        )
+        
+        if response.status_code == 200:
+            data = response.json()
+            
+            # Extract description fields
+            parts = []
+            for field in ['jobDescription', 'jobRequirement', 'benefit']:
+                val = data.get(field) or data.get('data', {}).get(field, '')
+                if val and isinstance(val, str):
+                    parts.append(val)
+            
+            return '\n'.join(filter(None, parts))
+    except:
+        pass
+    return ''
+
+def scrape_itviec_jobs(job_title, max_results=15):
+    """
+    Fetch jobs from VietnamWorks public API
+    No scraping needed - uses official JSON API
+    Works everywhere including deployed servers!
     """
     results = []
     
     try:
-        search_query = job_title.strip().replace(' ', '-').lower()
-        base_url = f"https://www.topcv.vn/tim-viec-lam-{search_query}"
+        print(f"\n🌐 Fetching from VietnamWorks API: {job_title}")
         
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',
-        }
+        response = requests.post(
+            'https://ms.vietnamworks.com/job-search/v1.0/search',
+            headers={
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            },
+            json={
+                "query": job_title,
+                "filter": [],
+                "ranges": [],
+                "order": [],
+                "hitsPerPage": max_results,
+                "page": 0
+            },
+            timeout=15
+        )
         
-        response = requests.get(base_url, headers=headers, timeout=10)
-        response.raise_for_status()
+        print(f"  Status: {response.status_code}")
         
-        soup = BeautifulSoup(response.content, 'html.parser')
-        job_cards = soup.find_all('div', class_='job-item-default')
+        if response.status_code != 200:
+            return {
+                'success': False,
+                'message': f'VietnamWorks API error: {response.status_code}',
+                'jobs': []
+            }
         
-        if not job_cards:
-            job_cards = soup.find_all('div', class_=re.compile(r'job.*item'))
+        data = response.json()
         
-        for idx, job_card in enumerate(job_cards[:max_results]):
+        # data is a list directly under 'data' key
+        jobs_data = data.get('data', [])
+        
+        print(f"  Found {len(jobs_data)} jobs")
+        
+        for job in jobs_data:
             try:
-                job_data = {}
+                if not isinstance(job, dict):
+                    continue
                 
-                title_elem = job_card.find('h3', class_='title') or job_card.find('a', class_='title')
-                if title_elem:
-                    job_data['title'] = title_elem.get_text(strip=True)
-                    job_link = title_elem.find('a') if title_elem.name != 'a' else title_elem
-                    if job_link and job_link.get('href'):
-                        job_data['url'] = job_link['href'] if job_link['href'].startswith('http') else f"https://www.topcv.vn{job_link['href']}"
+                title = job.get('jobTitle', '')
+                job_url = job.get('jobUrl', '')
+                job_id = job.get('jobId', '')
                 
-                if job_data.get('url'):
-                    print(f"Fetching JD & JR for job {idx+1}/{min(len(job_cards), max_results)}...")
-                    job_data['description_details'] = get_job_detail(job_data['url'], headers)
+                # Try to get description from list response first
+                description_parts = []
                 
-                if job_data.get('title') and job_data.get('description_details'):
-                    results.append(job_data)
+                for field in ['jobDescription', 'jobRequirement', 'benefit']:
+                    val = job.get(field, '')
+                    if val and isinstance(val, str) and len(val) > 50:
+                        description_parts.append(val)
+                
+                # Skills array
+                skills = job.get('skills') or []
+                if skills and isinstance(skills, list):
+                    skill_names = []
+                    for s in skills:
+                        if isinstance(s, dict):
+                            skill_names.append(s.get('name', '') or s.get('skill', ''))
+                        elif isinstance(s, str):
+                            skill_names.append(s)
+                    if skill_names:
+                        description_parts.append(' '.join(filter(None, skill_names)))
+                
+                # If no description in list, fetch from detail API
+                if not description_parts and job_id:
+                    detail = fetch_vietnamworks_detail(job_id)
+                    if detail:
+                        description_parts.append(detail)
+                
+                combined_text = '\n'.join(filter(None, description_parts))
+                
+                if title and combined_text:
+                    results.append({
+                        'title': title,
+                        'url': job_url,
+                        'description_details': [{
+                            'heading': 'Job Description & Requirements',
+                            'content': combined_text
+                        }]
+                    })
+                    print(f"  ✅ {title[:50]}")
+                else:
+                    print(f"  ⚠️  Skipped (no description): {title[:50]}")
                     
             except Exception as e:
-                print(f"Error parsing job card {idx}: {str(e)}")
+                print(f"  Error parsing job: {str(e)}")
                 continue
         
         if not results:
             return {
                 'success': False,
-                'message': f'Không tìm thấy việc làm cho "{job_title}"',
+                'message': f'Không tìm thấy việc làm cho "{job_title}". Thử keyword khác.',
                 'jobs': []
             }
         
+        print(f"\n✅ Got {len(results)} jobs from VietnamWorks")
+        
         return {
             'success': True,
-            'message': f'Tìm thấy {len(results)} công việc',
+            'message': f'Tìm thấy {len(results)} công việc trên VietnamWorks',
             'jobs': results
         }
         
+    except requests.exceptions.RequestException as e:
+        return {'success': False, 'message': f'Lỗi kết nối: {str(e)}', 'jobs': []}
     except Exception as e:
-        return {
-            'success': False,
-            'message': f'Lỗi: {str(e)}',
-            'jobs': []
-        }
-
-def analyze_jd_jr_with_groq(jobs):
-    """
-    Use Groq AI to analyze JD/JR and extract skills
-    More accurate than keyword matching
-    """
-    
-    if not GROQ_API_KEY:
-        print("⚠️  GROQ_API_KEY not found, falling back to keyword matching")
-        return analyze_skills_from_jobs_keyword(jobs)
-    
-    print("\n" + "="*60)
-    print("🤖 ANALYZING JD/JR WITH GROQ AI")
-    print("="*60)
-    
-    # Prepare JD/JR text for AI
-    jd_jr_texts = []
-    for idx, job in enumerate(jobs[:15], 1):  # Max 15 jobs
-        if job.get('description_details'):
-            job_text = '\n'.join([section['content'] for section in job['description_details']])
-            jd_jr_texts.append(f"Job {idx}:\n{job_text}\n")
-    
-    combined_text = '\n---\n'.join(jd_jr_texts)
-    
-    # Truncate if too long (max ~10K tokens = ~40K chars)
-    if len(combined_text) > 40000:
-        combined_text = combined_text[:40000] + "\n\n[Truncated...]"
-    
-    print(f"📊 Analyzing {len(jd_jr_texts)} job descriptions...")
-    print(f"📝 Total text length: {len(combined_text)} characters")
-    
-    # Groq API prompt
-    prompt = f"""Bạn là chuyên gia phân tích tuyển dụng IT. Hãy phân tích các Job Description (JD) và Job Requirements (JR) sau đây.
-
-{combined_text}
-
-Nhiệm vụ:
-1. Trích xuất TẤT CẢ các kỹ năng kỹ thuật (technical skills) được yêu cầu
-2. Đếm số lượng job yêu cầu mỗi skill
-3. Phân loại skills vào categories phù hợp
-
-QUAN TRỌNG: Trả lời CHÍNH XÁC theo format JSON này (không thêm markdown, không thêm backticks):
-{{
-  "skills": [
-    {{
-      "skill": "Tên skill",
-      "job_count": số_lượng_jobs,
-      "percentage": phần_trăm,
-      "category": "Programming Language/Frontend/Backend/Database/DevOps/Tools/Data-AI/Soft Skills"
-    }}
-  ]
-}}
-
-Lưu ý:
-- Chỉ list top 15 skills quan trọng nhất
-- Sắp xếp theo job_count giảm dần
-- Percentage = (job_count / {len(jobs)}) * 100
-- Category phải chính xác (Programming Language, Frontend, Backend, Database, DevOps, Tools, Data/AI, Soft Skills)
-- Skill names phải chuẩn: Python, Java, JavaScript, React, Docker, SQL, Git...
-"""
-
-    try:
-        print("📤 Sending request to Groq API...")
+        return {'success': False, 'message': f'Lỗi: {str(e)}', 'jobs': []}
         
-        response = requests.post(
-            'https://api.groq.com/openai/v1/chat/completions',
-            headers={
-                'Authorization': f'Bearer {GROQ_API_KEY}',
-                'Content-Type': 'application/json'
-            },
-            json={
-                'model': 'llama-3.3-70b-versatile',
-                'messages': [
-                    {
-                        'role': 'system', 
-                        'content': 'You are a technical recruiter expert. Always respond with valid JSON only, no markdown.'
-                    },
-                    {
-                        'role': 'user', 
-                        'content': prompt
-                    }
-                ],
-                'temperature': 0.3,  # Lower for more consistent output
-                'max_tokens': 2048
-            },
-            timeout=60
-        )
-        
-        print(f"📥 Groq response status: {response.status_code}")
-        
-        if response.status_code == 200:
-            result = response.json()
-            content = result['choices'][0]['message']['content'].strip()
-            
-            print(f"✅ Groq API SUCCESS!")
-            print(f"Response preview: {content[:200]}...")
-            
-            # Remove markdown code blocks if present
-            if content.startswith('```'):
-                content = content.split('```')[1]
-                if content.startswith('json'):
-                    content = content[4:]
-                content = content.strip()
-            
-            # Parse JSON
-            analysis = json.loads(content)
-            skills = analysis.get('skills', [])
-            
-            print(f"\n✅ Extracted {len(skills)} skills:")
-            for skill in skills[:10]:
-                print(f"   • {skill['skill']}: {skill['percentage']}% ({skill['job_count']} jobs) - {skill['category']}")
-            
-            return skills
-            
-        else:
-            print(f"❌ Groq API error: {response.status_code}")
-            print(f"Error details: {response.text[:200]}")
-            print("⚠️  Falling back to keyword matching...")
-            return analyze_skills_from_jobs_keyword(jobs)
-            
-    except Exception as e:
-        print(f"❌ Groq API error: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        print("⚠️  Falling back to keyword matching...")
-        return analyze_skills_from_jobs_keyword(jobs)
-
-def analyze_skills_from_jobs_keyword(jobs):
+def analyze_skills_from_jobs(jobs):
     """
-    Keyword-based skill extraction (fallback method)
-    Original implementation - fast and free
+    Analyze and extract required skills from all job descriptions
+    Each skill is counted ONCE per job (not total mentions)
     """
     # Comprehensive skill database
     skill_database = {
@@ -382,22 +354,7 @@ def analyze_skills_from_jobs_keyword(jobs):
     
     return skill_analysis
 
-def analyze_skills_from_jobs(jobs):
-    """
-    Main skill analysis function
-    Tries AI analysis first, falls back to keyword matching if needed
-    """
-    # Check if we should use AI
-    use_ai = os.getenv('USE_AI_SKILL_ANALYSIS', 'false').lower() == 'true'
-    
-    if use_ai and GROQ_API_KEY:
-        print("🤖 Using AI-powered skill analysis...")
-        return analyze_jd_jr_with_groq(jobs)
-    else:
-        print("🔤 Using keyword-based skill analysis...")
-        return analyze_skills_from_jobs_keyword(jobs)
-
-def get_skill_category(skill_name, skill_database=None):
+def get_skill_category(skill_name, skill_database):
     """Determine skill category"""
     categories = {
         'Programming Languages': ['Python', 'Java', 'JavaScript', 'TypeScript', 'C#', 'PHP', 'Go', 'Ruby', 'C++', 'Rust', 'Kotlin', 'Swift'],
@@ -565,22 +522,16 @@ Trả lời các câu hỏi sau để chứng minh hiểu biết technical và k
     
     return challenge
     
-
-def evaluate_answer_with_ai(question, answer, evaluation_criteria, use_ai=True):
+    """
+    Use AI to evaluate user's answer
+    Supports Claude API or Groq API (free alternative)
+    """
     
+    # Option to skip AI and use fallback
     if not use_ai:
         return fallback_evaluation(answer, evaluation_criteria)
     
-    if AI_PROVIDER == 'groq' and GROQ_API_KEY:
-        return evaluate_with_groq(question, answer, evaluation_criteria)
-    elif AI_PROVIDER == 'claude' and ANTHROPIC_API_KEY:
-        return evaluate_with_claude(question, answer, evaluation_criteria)
-    else:
-        return fallback_evaluation(answer, evaluation_criteria)
-    
-    if not use_ai:
-        return fallback_evaluation(answer, evaluation_criteria)
-    
+    # Check which provider to use
     if AI_PROVIDER == 'groq' and GROQ_API_KEY:
         return evaluate_with_groq(question, answer, evaluation_criteria)
     elif AI_PROVIDER == 'claude' and ANTHROPIC_API_KEY:
@@ -634,7 +585,7 @@ QUAN TRỌNG: Trả lời CHÍNH XÁC theo format JSON này (không thêm markdo
                 'Content-Type': 'application/json'
             },
             json={
-                'model': 'llama-3.3-70b-versatile',  # Free model
+                'model': 'llama-3.1-70b-versatile',  # Free model
                 'messages': [
                     {'role': 'system', 'content': 'You are a helpful technical interviewer. Always respond with valid JSON only.'},
                     {'role': 'user', 'content': prompt}
@@ -991,7 +942,7 @@ def analyze_market():
         return jsonify({'success': False, 'message': 'Vui lòng nhập tên nghề'})
     
     # Scrape jobs
-    scrape_results = scrape_topcv_jobs(job_title, max_results)
+    scrape_results = scrape_itviec_jobs(job_title, max_results)
     
     if not scrape_results['success']:
         return jsonify(scrape_results)
