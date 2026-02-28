@@ -14,140 +14,110 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
-GROQ_API_KEY          = os.getenv('GROQ_API_KEY', '')
-GEMINI_API_KEY        = os.getenv('GEMINI_API_KEY', '')  # kept for backward compat
+CLAUDE_API_KEY        = os.getenv('CLAUDE_API_KEY', '')
 USE_AI_EVALUATION     = os.getenv('USE_AI_EVALUATION', 'true').lower() == 'true'
 USE_AI_SKILL_ANALYSIS = os.getenv('USE_AI_SKILL_ANALYSIS', 'true').lower() == 'true'
-GROQ_MODEL            = os.getenv('GROQ_MODEL', 'llama-3.3-70b-versatile')
-
-# Use Groq if available, else fall back to Gemini
-ACTIVE_API = 'groq' if GROQ_API_KEY else ('gemini' if GEMINI_API_KEY else None)
+CLAUDE_MODEL          = os.getenv('CLAUDE_MODEL', 'claude-sonnet-4-5')
 
 print("=" * 60)
 print("🔧 AURA CONFIGURATION:")
 print(f"  USE_AI_EVALUATION    : {USE_AI_EVALUATION}")
 print(f"  USE_AI_SKILL_ANALYSIS: {USE_AI_SKILL_ANALYSIS}")
-print(f"  GROQ_API_KEY         : {'✅ set' if GROQ_API_KEY else '❌ MISSING'}")
-print(f"  GEMINI_API_KEY       : {'✅ set' if GEMINI_API_KEY else '❌ MISSING'}")
-print(f"  ACTIVE_API           : {ACTIVE_API or '❌ NONE - will use fallback!'}")
-if GROQ_API_KEY:
-    print(f"  GROQ_MODEL           : {GROQ_MODEL}")
+print(f"  CLAUDE_API_KEY       : {'✅ set' if CLAUDE_API_KEY else '❌ MISSING'}")
+print(f"  CLAUDE_MODEL         : {CLAUDE_MODEL}")
 print("=" * 60)
 print()
 
 def call_ai_api(prompt, max_tokens=2048, temperature=0.3):
     """
-    Unified AI API caller: tries Groq first, falls back to Gemini.
+    Call Claude API.
     Returns parsed JSON response or None on error.
     """
-    if GROQ_API_KEY:
-        result = call_groq_api(prompt, max_tokens, temperature)
-        if result is not None:
-            return result
-        print("⚠️  Groq failed → trying Gemini fallback")
-    if GEMINI_API_KEY:
-        return call_gemini_api(prompt, max_tokens, temperature)
+    if CLAUDE_API_KEY:
+        return call_claude_api(prompt, max_tokens, temperature)
+    print("⚠️  No Claude API key configured")
     return None
 
-def call_groq_api(prompt, max_tokens=2048, temperature=0.3):
-    """Call Groq API (OpenAI-compatible). Returns parsed JSON or None."""
+def call_claude_api(prompt, max_tokens=2048, temperature=0.3):
+    """Call Claude API (Anthropic). Returns parsed JSON or None."""
     try:
         response = requests.post(
-            'https://api.groq.com/openai/v1/chat/completions',
+            'https://api.anthropic.com/v1/messages',
             headers={
-                'Authorization': f'Bearer {GROQ_API_KEY}',
+                'x-api-key': CLAUDE_API_KEY,
+                'anthropic-version': '2023-06-01',
                 'Content-Type': 'application/json',
             },
             json={
-                'model': GROQ_MODEL,
-                'messages': [{'role': 'user', 'content': prompt}],
+                'model': CLAUDE_MODEL,
                 'max_tokens': max_tokens,
                 'temperature': temperature,
+                'messages': [{'role': 'user', 'content': prompt}],
             },
             timeout=60
         )
 
         if response.status_code == 200:
             data = response.json()
-            content = data['choices'][0]['message']['content'].strip()
-            print(f"📥 Groq raw response preview: {content[:150]}...")
-            return _parse_json_from_content(content)
-        else:
-            print(f"❌ Groq API error {response.status_code}: {response.text[:200]}")
-            return None
-    except Exception as e:
-        print(f"❌ Groq API exception: {str(e)}")
-        return None
-
-def call_gemini_api(prompt, max_tokens=2048, temperature=0.3):
-    """Call Gemini API. Returns parsed JSON or None."""
-    if not GEMINI_API_KEY:
-        return None
-    
-    try:
-        # Gemini uses REST API with API key in URL
-        url = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key={GEMINI_API_KEY}'
-        
-        response = requests.post(
-            url,
-            headers={'Content-Type': 'application/json'},
-            json={
-                'contents': [{
-                    'parts': [{'text': prompt}]
-                }],
-                'generationConfig': {
-                    'temperature': temperature,
-                    'maxOutputTokens': max_tokens
-                }
-            },
-            timeout=60
-        )
-        
-        if response.status_code == 200:
-            data = response.json()
-            if 'candidates' not in data or not data['candidates']:
-                print(f"❌ Gemini: No candidates in response")
+            # Guard against unexpected response structure
+            if not data.get('content') or not data['content']:
+                print(f"❌ Claude API: empty content array. stop_reason={data.get('stop_reason')} usage={data.get('usage')}")
                 return None
-            content = data['candidates'][0]['content']['parts'][0]['text'].strip()
-            print(f"📥 Gemini raw response preview: {content[:150]}...")
-            return _parse_json_from_content(content)
+            text = data['content'][0].get('text', '').strip()
+            if not text:
+                print(f"❌ Claude API: text field empty. stop_reason={data.get('stop_reason')}")
+                return None
+            print(f"📥 Claude raw response preview: {text[:200]}...")
+            return _parse_json_from_content(text)
         else:
-            print(f"❌ Gemini API error {response.status_code}: {response.text[:200]}")
+            print(f"❌ Claude API error {response.status_code}: {response.text[:500]}")
             return None
     except Exception as e:
-        print(f"❌ Gemini API exception: {str(e)}")
-        import traceback
-        traceback.print_exc()
+        print(f"❌ Claude API exception: {str(e)}")
         return None
 
-def _parse_json_from_content(content):
+def _parse_json_from_content(raw):
     """Parse JSON from API response, handling markdown code blocks."""
-    if '```json' in content:
-        start = content.find('```json') + 7
-        end = content.find('```', start)
-        if end > start:
-            content = content[start:end].strip()
-    elif '```' in content:
-        parts = content.split('```')
-        if len(parts) >= 3:
-            content = parts[1].strip()
+    if not raw or not raw.strip():
+        print(f"❌ Empty content received from API")
+        return None
+
+    text = raw.strip()
+
+    # Strip ```json ... ``` or ``` ... ```
+    if '```' in text:
+        # Find first ``` and last ```
+        first = text.find('```')
+        last  = text.rfind('```')
+        if first != last:
+            inner = text[first+3:last].strip()
+            # Remove optional language tag on first line (e.g. "json")
+            if inner and not inner.startswith('{') and '\n' in inner:
+                inner = inner[inner.index('\n'):].strip()
+            text = inner
+
+    # Try direct parse
     try:
-        return json.loads(content)
+        return json.loads(text)
     except json.JSONDecodeError as e:
         print(f"❌ JSON decode error: {e}")
-        if '{' in content and '}' in content:
-            s = content.find('{')
-            e2 = content.rfind('}') + 1
-            try:
-                return json.loads(content[s:e2])
-            except:
-                pass
-        return None
+        print(f"❌ Content that failed (first 300 chars): {text[:300]}")
+
+    # Fallback: extract first { ... } block
+    if '{' in text:
+        s  = text.find('{')
+        e2 = text.rfind('}') + 1
+        try:
+            return json.loads(text[s:e2])
+        except json.JSONDecodeError as fe:
+            print(f"❌ Fallback JSON extract also failed: {fe}")
+
+    print(f"❌ Full raw content (first 500 chars):\n{raw[:500]}")
+    return None
 
 def fetch_vietnamworks_detail(job_url):
     """
     Scrape JD & JR from VietnamWorks job detail page
-    VietnamWorks job pages are not blocked!
     """
     try:
         time.sleep(0.5)
@@ -214,8 +184,6 @@ def fetch_vietnamworks_detail(job_url):
 def scrape_itviec_jobs(job_title, max_results=30):
     """
     Fetch jobs from VietnamWorks public API
-    No scraping needed - uses official JSON API
-    Works everywhere including deployed servers!
     """
     results = []
     
@@ -253,7 +221,6 @@ def scrape_itviec_jobs(job_title, max_results=30):
             }
         
         data = response.json()
-        
         jobs_data = data.get('data', [])
         
         print(f"  Found {len(jobs_data)} jobs")
@@ -266,7 +233,6 @@ def scrape_itviec_jobs(job_title, max_results=30):
                 title = job.get('jobTitle', '')
                 job_url = job.get('jobUrl', '')
                 job_id = job.get('jobId', '')
-                
                 
                 description_parts = []
                 
@@ -330,14 +296,14 @@ def scrape_itviec_jobs(job_title, max_results=30):
     except Exception as e:
         return {'success': False, 'message': f'Lỗi: {str(e)}', 'jobs': []}
         
-def analyze_jd_jr_with_gemini(jobs):
-    """Call AI API to analyze JD/JR and extract skills"""
-    if not ACTIVE_API:
-        print("⚠️  No AI API configured → skip AI analysis")
+def analyze_jd_jr_with_claude(jobs):
+    """Call Claude API to analyze JD/JR and extract skills"""
+    if not CLAUDE_API_KEY:
+        print("⚠️  No Claude API key configured → skip AI analysis")
         return None
 
     print(f"\n{'='*60}")
-    print(f"🤖 AI ({ACTIVE_API.upper()}): ANALYZING JD/JR")
+    print(f"🤖 AI (CLAUDE): ANALYZING JD/JR")
     print(f"{'='*60}")
 
     jd_texts = []
@@ -386,7 +352,7 @@ Lưu ý:
 - Bao gồm soft skills nếu xuất hiện nhiều
 - ONLY return the JSON object, nothing else"""
 
-    print("📤 Calling Gemini API...")
+    print("📤 Calling Claude API...")
     
     result = call_ai_api(
         prompt=prompt,
@@ -397,29 +363,28 @@ Lưu ý:
     if result and 'skills' in result:
         skills = result['skills']
         total_jobs = len(jobs)
-        # Recalculate percentage from job_count to avoid AI hallucinating wrong numbers
         for s in skills:
             job_count = s.get('job_count', 0)
             s['percentage'] = round(job_count / total_jobs * 100, 1) if total_jobs > 0 else 0
-        print(f"✅ Gemini extracted {len(skills)} skills:")
+        print(f"✅ Claude extracted {len(skills)} skills:")
         for s in skills[:10]:
             print(f"   • {s['skill']}: {s['percentage']}% ({s['job_count']} jobs) [{s['category']}]")
         return skills
     
-    print("❌ Gemini analysis failed")
+    print("❌ Claude analysis failed")
     return None
 
 def analyze_skills_from_jobs(jobs):
     """
-    Entry point: dùng Groq nếu USE_AI_SKILL_ANALYSIS=true,
-    fallback về keyword matching nếu Groq fail hoặc tắt.
+    Entry point: dùng Claude nếu USE_AI_SKILL_ANALYSIS=true,
+    fallback về keyword matching nếu Claude fail hoặc tắt.
     """
     if USE_AI_SKILL_ANALYSIS:
-        print("🤖 Using Groq skill analysis...")
-        result = analyze_jd_jr_with_gemini(jobs)
+        print("🤖 Using Claude skill analysis...")
+        result = analyze_jd_jr_with_claude(jobs)
         if result:
             return result
-        print("⚠️  Groq failed → fallback to keyword matching")
+        print("⚠️  Claude failed → fallback to keyword matching")
     else:
         print("🔤 Using keyword skill analysis...")
 
@@ -542,7 +507,6 @@ def generate_technical_challenge(job_title, top_skills):
     print("🎯 GENERATING TECHNICAL CHALLENGE")
     print("="*60)
     
-    # Load question bank
     try:
         with open('skill_questions.json', 'r', encoding='utf-8') as f:
             question_bank = json.load(f)
@@ -551,13 +515,11 @@ def generate_technical_challenge(job_title, top_skills):
         print("⚠️  skill_questions.json not found - using fallback")
         return generate_fallback_challenge(job_title, top_skills)
     
-    # Filter TECH SKILLS only (exclude soft skills)
     soft_skills = ['English', 'Communication', 'Teamwork', 'Problem Solving']
     tech_skills = [s for s in top_skills if s['skill'] not in soft_skills]
     
-    # Skill name mapping: market skill → question bank skill
     skill_name_mapping = {
-        'HTML/CSS': ['HTML/HTML5', 'CSS/CSS3'],  # Map to BOTH
+        'HTML/CSS': ['HTML/HTML5', 'CSS/CSS3'],
         'HTML5': 'HTML/HTML5',
         'HTML': 'HTML/HTML5',
         'CSS3': 'CSS/CSS3',
@@ -574,20 +536,16 @@ def generate_technical_challenge(job_title, top_skills):
     for i, skill in enumerate(tech_skills[:10], 1):
         print(f"  {i}. {skill['skill']}: {skill['percentage']}% ({skill['job_count']} jobs)")
     
-    # Match market skills with question bank
     matched_skills = []
     for skill_data in tech_skills:
         skill_name = skill_data['skill']
         
-        # Try direct match first
         if skill_name in question_bank:
             matched_skills.append(skill_data)
             print(f"✅ Matched: {skill_name}")
-        # Try mapped name
         elif skill_name in skill_name_mapping:
             mapped = skill_name_mapping[skill_name]
             
-            # Handle 1-to-many mapping (e.g., HTML/CSS → both HTML and CSS)
             if isinstance(mapped, list):
                 for mapped_name in mapped:
                     if mapped_name in question_bank:
@@ -595,7 +553,6 @@ def generate_technical_challenge(job_title, top_skills):
                         mapped_skill['skill'] = mapped_name
                         matched_skills.append(mapped_skill)
                         print(f"✅ Mapped: {skill_name} → {mapped_name}")
-            # Handle 1-to-1 mapping
             else:
                 if mapped in question_bank:
                     mapped_skill = skill_data.copy()
@@ -613,11 +570,9 @@ def generate_technical_challenge(job_title, top_skills):
     
     print(f"\n🎯 {len(matched_skills)} skills matched with question bank")
     
-    # Pick 5 questions from matched skills
     selected_questions = []
     question_id = 1
     
-    # Round-robin: pick 1 question from each top skill until we have 5
     for i, skill_data in enumerate(matched_skills):
         if len(selected_questions) >= 5:
             break
@@ -625,7 +580,6 @@ def generate_technical_challenge(job_title, top_skills):
         skill_name = skill_data['skill']
         skill_info = question_bank[skill_name]
         
-        # Get the single question for this skill
         selected_questions.append({
             'id': question_id,
             'skill': skill_name,
@@ -638,7 +592,6 @@ def generate_technical_challenge(job_title, top_skills):
     
     print(f"\n✅ Selected {len(selected_questions)} questions")
     
-    # Build challenge
     challenge = {
         'job_title': job_title,
         'skills_tested': [q['skill'] for q in selected_questions],
@@ -698,17 +651,17 @@ def evaluate_answer_with_ai(question, answer, evaluation_criteria):
     if not USE_AI_EVALUATION:
         return fallback_evaluation(answer, evaluation_criteria)
 
-    if ACTIVE_API:
-        return evaluate_with_gemini(question, answer, evaluation_criteria)
+    if CLAUDE_API_KEY:
+        return evaluate_with_claude(question, answer, evaluation_criteria)
 
-    print("⚠️  No AI API configured → fallback evaluation")
+    print("⚠️  No Claude API key configured → fallback evaluation")
     return fallback_evaluation(answer, evaluation_criteria)
 
-def evaluate_with_gemini(question, answer, evaluation_criteria):
-    """Use AI API (Groq/Gemini) to evaluate answer and determine skill level"""
+def evaluate_with_claude(question, answer, evaluation_criteria):
+    """Use Claude API to evaluate answer and determine skill level"""
     
     print("="*50)
-    print(f"🚀 CALLING AI API ({ACTIVE_API})...")
+    print(f"🚀 CALLING CLAUDE API...")
     print(f"Question: {question[:50]}...")
     print(f"Answer length: {len(answer)} chars")
     print("="*50)
@@ -765,7 +718,6 @@ NHIỆM VỤ: Đánh giá trình độ của ứng viên trên kỹ năng này t
 - Architecture decisions cho large-scale systems
 - Biết edge cases và limitations
 - References best practices từ official docs/RFCs
-- VD: "React 18 concurrent rendering với startTransition cho non-urgent updates. Redux: normalized state với selectors (reselect) để prevent re-renders. Alternative: Jotai atoms cho atomic state. Trade-off: learning curve vs team size. For 100k+ users: consider state machine (XState) cho complex flows."
 
 CHÚ Ý:
 - Đánh giá dựa vào NỘI DUNG trả lời, KHÔNG phải độ dài
@@ -785,7 +737,7 @@ JSON format:
     "improvements": ["cải thiện 1", "cải thiện 2"]
 }}"""
 
-    print(f"📤 Calling AI API ({ACTIVE_API})...")
+    print(f"📤 Calling Claude API...")
     
     result = call_ai_api(
         prompt=prompt,
@@ -794,10 +746,10 @@ JSON format:
     )
     
     if result:
-        print(f"✅ AI API SUCCESS! Score: {result.get('score', 0)}/5")
+        print(f"✅ Claude API SUCCESS! Score: {result.get('score', 0)}/5")
         return result
     
-    print("❌ AI API failed → fallback")
+    print("❌ Claude API failed → fallback")
     return fallback_evaluation(answer, evaluation_criteria)
 
 def fallback_evaluation(answer, evaluation_criteria):
@@ -819,7 +771,7 @@ def fallback_evaluation(answer, evaluation_criteria):
         'level_name': level_names[score],
         'feedback': f'Đánh giá tự động (API chưa cấu hình). Câu trả lời đề cập {score}/{len(evaluation_criteria)} tiêu chí.',
         'strengths': ['Có đề cập khái niệm liên quan'] if score > 0 else [],
-        'improvements': ['Phân tích trade-offs', 'Thêm ví dụ thực tế', 'Cấu hình GROQ_API_KEY để đánh giá chính xác']
+        'improvements': ['Phân tích trade-offs', 'Thêm ví dụ thực tế', 'Cấu hình CLAUDE_API_KEY để đánh giá chính xác']
     }
 
 def calculate_skill_gap(assessment_results, market_skills):
@@ -835,10 +787,10 @@ def calculate_skill_gap(assessment_results, market_skills):
         market_skill = next((s for s in market_skills if s['skill'] == skill_name), None)
         
         if market_skill:
-            market_importance = min(5, int(market_skill['percentage'] / 50))  # Scale to 0-5
+            market_importance = min(5, int(market_skill['percentage'] / 50))
             gap = market_importance - user_level
             
-            if gap > 0:  # Only skills that need improvement
+            if gap > 0:
                 skill_gaps.append({
                     'skill': skill_name,
                     'current_level': user_level,
@@ -860,7 +812,6 @@ def generate_learning_suggestions(evaluations, top_skills):
     - Score >= 3: Call AI for personalized advanced topics
     """
     
-    # Load knowledge map
     try:
         with open('knowledge_map.json', 'r', encoding='utf-8') as f:
             knowledge_map = json.load(f)
@@ -869,17 +820,14 @@ def generate_learning_suggestions(evaluations, top_skills):
     
     suggestions = []
     
-    # Map evaluations to skills
     eval_by_skill = {}
     for ev in evaluations:
         skill = ev.get('skill', 'Unknown')
         eval_by_skill[skill] = ev
     
-    # Generate suggestions for top 5 skills only
     for skill_data in top_skills[:5]:
         skill_name = skill_data['skill']
         
-        # Get evaluation for this skill (if exists)
         evaluation = eval_by_skill.get(skill_name)
         
         if not evaluation:
@@ -888,13 +836,10 @@ def generate_learning_suggestions(evaluations, top_skills):
         score = evaluation.get('score', 0)
         level_name = evaluation.get('level_name', 'Unknown')
         
-        # Hybrid logic
         if score < 3:
-            # Use static knowledge map
             suggestion = get_static_learning_path(skill_name, score, knowledge_map)
             suggestion['method'] = 'structured'
         else:
-            # Call AI for personalized suggestions
             suggestion = get_ai_advanced_suggestions(
                 skill_name, 
                 score, 
@@ -914,17 +859,14 @@ def generate_learning_suggestions(evaluations, top_skills):
 def get_static_learning_path(skill_name, score, knowledge_map):
     """Get structured learning path from knowledge map for beginners"""
     
-    # Map score to level key
     if score <= 1:
         level_key = 'level_0_1'
     else:
         level_key = 'level_2'
     
-    # Get from knowledge map
     if skill_name in knowledge_map and level_key in knowledge_map[skill_name]:
         return knowledge_map[skill_name][level_key]
     
-    # Fallback if skill not in map
     return {
         'current_level': f'Level {score}/5',
         'topics_to_learn': [
@@ -946,11 +888,11 @@ def get_static_learning_path(skill_name, score, knowledge_map):
 
 def get_ai_advanced_suggestions(skill_name, score, level_name, feedback, improvements):
     """
-    Call Gemini to generate personalized advanced learning suggestions
+    Call Claude to generate personalized advanced learning suggestions
     Only for users with score >= 3 (already competent)
     """
     
-    if not ACTIVE_API or not USE_AI_EVALUATION:
+    if not CLAUDE_API_KEY or not USE_AI_EVALUATION:
         return {
             'current_level': level_name,
             'topics_to_learn': [
@@ -1018,7 +960,6 @@ Trả về JSON (NO markdown):
         result['current_level'] = level_name
         return result
     
-    # Fallback
     return {
         'current_level': level_name,
         'topics_to_learn': [f'Advanced {skill_name} topics'],
@@ -1030,7 +971,6 @@ Trả về JSON (NO markdown):
 def generate_learning_roadmap(skill_gaps, job_title, days=7):
     """
     Generate learning roadmap based on skill gaps
-    days: 3 for short roadmap, 7 for full roadmap
     """
     priority_skills = skill_gaps[:5]
     
@@ -1079,96 +1019,47 @@ def generate_learning_roadmap(skill_gaps, job_title, days=7):
         
         return roadmap
     
-    
     roadmap['daily_plan'].append({
-        'day': 1,
-        'title': 'Foundation & Setup',
+        'day': 1, 'title': 'Foundation & Setup',
         'focus': 'Cài đặt môi trường & học cơ bản',
         'skills': [priority_skills[0]['skill']] if len(priority_skills) > 0 else [],
-        'tasks': [
-            'Cài đặt công cụ và môi trường phát triển',
-            'Học syntax và concepts cơ bản',
-            'Làm bài tập nhỏ để làm quen',
-            'Đọc documentation chính thức'
-        ]
+        'tasks': ['Cài đặt công cụ và môi trường phát triển', 'Học syntax và concepts cơ bản', 'Làm bài tập nhỏ để làm quen', 'Đọc documentation chính thức']
     })
-    
     roadmap['daily_plan'].append({
-        'day': 2,
-        'title': 'Core Concepts',
+        'day': 2, 'title': 'Core Concepts',
         'focus': 'Nắm vững khái niệm cốt lõi',
         'skills': [priority_skills[0]['skill']] if len(priority_skills) > 0 else [],
-        'tasks': [
-            'Học các design patterns phổ biến',
-            'Practice hands-on exercises',
-            'Build small projects',
-            'Review best practices'
-        ]
+        'tasks': ['Học các design patterns phổ biến', 'Practice hands-on exercises', 'Build small projects', 'Review best practices']
     })
-    
     roadmap['daily_plan'].append({
-        'day': 3,
-        'title': 'Expand Skills',
+        'day': 3, 'title': 'Expand Skills',
         'focus': 'Mở rộng kỹ năng bổ trợ',
         'skills': [priority_skills[1]['skill']] if len(priority_skills) > 1 else [],
-        'tasks': [
-            'Học framework/library phổ biến',
-            'Tích hợp với skill ngày 1-2',
-            'Build mini-project kết hợp',
-            'Code review & refactoring'
-        ]
+        'tasks': ['Học framework/library phổ biến', 'Tích hợp với skill ngày 1-2', 'Build mini-project kết hợp', 'Code review & refactoring']
     })
-    
     roadmap['daily_plan'].append({
-        'day': 4,
-        'title': 'Advanced Topics',
+        'day': 4, 'title': 'Advanced Topics',
         'focus': 'Chủ đề nâng cao',
         'skills': [priority_skills[2]['skill']] if len(priority_skills) > 2 else [],
-        'tasks': [
-            'Học advanced concepts',
-            'Performance optimization',
-            'Security best practices',
-            'Testing & debugging'
-        ]
+        'tasks': ['Học advanced concepts', 'Performance optimization', 'Security best practices', 'Testing & debugging']
     })
-    
     roadmap['daily_plan'].append({
-        'day': 5,
-        'title': 'Project Planning',
+        'day': 5, 'title': 'Project Planning',
         'focus': 'Lên kế hoạch dự án chính',
         'skills': ['All learned skills'],
-        'tasks': [
-            'Brainstorm project ideas',
-            'Design architecture',
-            'Setup project structure',
-            'Create task breakdown'
-        ]
+        'tasks': ['Brainstorm project ideas', 'Design architecture', 'Setup project structure', 'Create task breakdown']
     })
-    
     roadmap['daily_plan'].append({
-        'day': 6,
-        'title': 'Build Artifact',
+        'day': 6, 'title': 'Build Artifact',
         'focus': 'Xây dựng Proof of Work',
         'skills': ['All learned skills'],
-        'tasks': [
-            'Implement core features',
-            'Apply all learned skills',
-            'Write clean, documented code',
-            'Add tests'
-        ]
+        'tasks': ['Implement core features', 'Apply all learned skills', 'Write clean, documented code', 'Add tests']
     })
-    
     roadmap['daily_plan'].append({
-        'day': 7,
-        'title': 'Polish & Deploy',
+        'day': 7, 'title': 'Polish & Deploy',
         'focus': 'Hoàn thiện và deploy',
         'skills': ['DevOps', 'Documentation'],
-        'tasks': [
-            'UI/UX improvements',
-            'Deploy to production',
-            'Write comprehensive README',
-            'Prepare for CV showcase'
-        ]
+        'tasks': ['UI/UX improvements', 'Deploy to production', 'Write comprehensive README', 'Prepare for CV showcase']
     })
     
     return roadmap
@@ -1183,10 +1074,6 @@ def load_artifacts_db():
         return {}
 
 def match_artifact_category(job_title: str, top_skills: list) -> str:
-    """
-    Match job_title + skills to best artifact category.
-    Returns category key (e.g. 'frontend', 'backend', ...).
-    """
     db = load_artifacts_db()
     job_lower = job_title.lower()
     skill_names = [s['skill'].lower() for s in top_skills]
@@ -1201,14 +1088,13 @@ def match_artifact_category(job_title: str, top_skills: list) -> str:
         score = 0
         for kw in keywords:
             if kw in job_lower:
-                score += 3  # Job title match weighs more
+                score += 3
             if any(kw in sk for sk in skill_names):
                 score += 1
         if score > best_score:
             best_score = score
             best_cat = cat
 
-    # Default fallback
     if not best_cat:
         best_cat = 'fullstack'
 
@@ -1217,10 +1103,6 @@ def match_artifact_category(job_title: str, top_skills: list) -> str:
 
 
 def generate_artifact_ideas(job_title, top_skills):
-    """
-    Load 3 artifact ideas from artifacts.json matching job_title + skills.
-    Falls back to hardcoded list if file not found.
-    """
     db = load_artifacts_db()
     if not db:
         return _fallback_artifact_ideas(job_title, top_skills)
@@ -1229,7 +1111,6 @@ def generate_artifact_ideas(job_title, top_skills):
     cat_data = db.get(category, db.get('fullstack', {}))
     raw_artifacts = cat_data.get('artifacts', [])
 
-    # Convert to frontend-friendly format
     result = []
     for a in raw_artifacts[:3]:
         result.append({
@@ -1250,7 +1131,6 @@ def generate_artifact_ideas(job_title, top_skills):
 
 
 def _fallback_artifact_ideas(job_title, top_skills):
-    """Fallback when artifacts.json is missing."""
     skill_names = [s['skill'] for s in top_skills[:4]]
     return [
         {
@@ -1283,19 +1163,14 @@ def analyze_market():
     if not job_title:
         return jsonify({'success': False, 'message': 'Vui lòng nhập tên nghề'})
     
-    # Scrape jobs
     scrape_results = scrape_itviec_jobs(job_title, max_results)
     
     if not scrape_results['success']:
         return jsonify(scrape_results)
     
-    # Analyze skills
     skill_analysis = analyze_skills_from_jobs(scrape_results['jobs'])
-    
-    # Generate technical challenge based on top skills
     challenge = generate_technical_challenge(job_title, skill_analysis)
     
-    # Store in session
     session['job_title'] = job_title
     session['market_skills'] = skill_analysis
     session['challenge'] = challenge
@@ -1322,7 +1197,7 @@ def submit_challenge():
         return jsonify({'success': False, 'message': 'Session expired'})
     
     evaluations = []
-    skill_scores = {}  # Map skill to average score
+    skill_scores = {}
     
     for answer_data in answers:
         question_id = answer_data['question_id']
@@ -1357,29 +1232,23 @@ def submit_challenge():
         'SQL': ['SQL', 'PostgreSQL', 'MySQL'],
         'MongoDB': ['MongoDB', 'NoSQL'],
         'NoSQL': ['MongoDB', 'Redis', 'Elasticsearch'],
-        
         'Scaling': ['Docker', 'Kubernetes', 'AWS', 'Azure', 'Google Cloud'],
         'Caching': ['Redis', 'Memcached'],
         'Load Balancing': ['Kubernetes', 'AWS', 'Nginx'],
         'Performance': ['React', 'Vue.js', 'JavaScript', 'Optimization'],
         'Optimization': ['Performance', 'Caching'],
-        
         'Security': ['Authentication', 'OAuth', 'JWT'],
         'Authentication': ['Security', 'JWT', 'OAuth'],
-        
         'State Management': ['React', 'Vue.js', 'Redux'],
         'React': ['React', 'JavaScript', 'Frontend'],
         'Vue.js': ['Vue.js', 'JavaScript', 'Frontend'],
         'PWA': ['JavaScript', 'Service Workers'],
         'Offline-first': ['PWA', 'Service Workers'],
-        
         'Architecture': ['Microservices', 'System Design'],
         'System Design': ['Architecture', 'Microservices'],
         'Microservices': ['Docker', 'Kubernetes'],
-        
         'DevOps': ['Docker', 'Kubernetes', 'CI/CD'],
         'Reliability': ['DevOps', 'Monitoring'],
-        
         'Machine Learning': ['Python', 'TensorFlow', 'PyTorch'],
         'Data Engineering': ['Python', 'SQL', 'Apache Spark'],
         'ETL': ['Data Engineering', 'Python', 'SQL'],
@@ -1389,7 +1258,7 @@ def submit_challenge():
     }
     
     assessment_results = []
-    market_skill_scores = {}  # Track scores for each market skill
+    market_skill_scores = {}
     
     for challenge_skill, score in avg_skill_scores.items():
         if challenge_skill in [s['skill'] for s in market_skills]:
@@ -1420,7 +1289,6 @@ def submit_challenge():
     
     skill_gaps = calculate_skill_gap(assessment_results, market_skills)
     
-    # Check readiness using ACTUAL evaluation scores (from 5 questions answered)
     actual_scores = [e['score'] for e in evaluations if 'score' in e]
     
     if actual_scores:
@@ -1463,8 +1331,6 @@ def submit_challenge():
         print(f"  ⚠️  No scores - FULL ROADMAP")
     
     artifacts = generate_artifact_ideas(job_title, market_skills)
-    
-    # Generate learning suggestions for top 5 skills
     learning_suggestions = generate_learning_suggestions(evaluations, market_skills)
     
     session['evaluations'] = evaluations
@@ -1499,7 +1365,6 @@ def get_roadmap():
 # ─────────────────────────────────────────────────────────────
 
 def _github_headers():
-    """Build GitHub API headers, attach token if available."""
     headers = {
         'Accept': 'application/vnd.github.v3+json',
         'User-Agent': 'Aura-App/1.0',
@@ -1514,13 +1379,11 @@ def _github_headers():
 
 
 def _github_error_message(status_code, response_body=''):
-    """Return human-friendly error message for GitHub API status codes."""
     if status_code == 401:
         return ('GitHub token không hợp lệ hoặc đã hết hạn. '
                 'Vào GitHub → Settings → Developer settings → Personal access tokens → tạo token mới, '
                 'rồi set GITHUB_TOKEN=<token> trong file .env')
     if status_code == 403:
-        # Check if it's rate limit
         if 'rate limit' in response_body.lower() or 'api rate limit' in response_body.lower():
             return ('GitHub API rate limit exceeded (60 req/giờ với unauthenticated). '
                     'Fix: Tạo GitHub Personal Access Token (free) và set GITHUB_TOKEN=<token> trong .env. '
@@ -1543,20 +1406,18 @@ def fetch_github_repo(github_url):
         return {'success': False, 'message': 'URL GitHub không hợp lệ. Ví dụ: https://github.com/user/repo'}
 
     repo_path = match.group(1).rstrip('/')
-    repo_path = re.sub(r'\.git$', '', repo_path)  # strip trailing .git if any
+    repo_path = re.sub(r'\.git$', '', repo_path)
     print(f"\n📦 Fetching GitHub repo: {repo_path}")
 
     headers = _github_headers()
 
     try:
-        # ── 1. Repo metadata ──────────────────────────────────────────
         r = requests.get(f'https://api.github.com/repos/{repo_path}',
                          headers=headers, timeout=15)
 
         if r.status_code != 200:
             msg = _github_error_message(r.status_code, r.text)
             print(f"  ❌ Repo fetch failed: {r.status_code}")
-            # Log rate limit headers if present
             remaining = r.headers.get('X-RateLimit-Remaining', '?')
             reset_ts  = r.headers.get('X-RateLimit-Reset', '')
             if reset_ts:
@@ -1568,10 +1429,7 @@ def fetch_github_repo(github_url):
         repo = r.json()
         print(f"  ✅ Repo found: {repo.get('full_name')} ({'private' if repo.get('private') else 'public'})")
 
-        # ── 2. README ─────────────────────────────────────────────────
         readme_text = ''
-
-        # Try API first (works for both public & private with token)
         r2 = requests.get(
             f'https://api.github.com/repos/{repo_path}/README',
             headers={**headers, 'Accept': 'application/vnd.github.v3.raw'},
@@ -1581,7 +1439,6 @@ def fetch_github_repo(github_url):
             readme_text = r2.text[:8000]
             print(f"  ✅ README: {len(readme_text)} chars (via API)")
         else:
-            # Fallback: try raw.githubusercontent.com for public repos
             for branch in ('main', 'master'):
                 for fname in ('README.md', 'readme.md', 'README.MD'):
                     raw_url = f'https://raw.githubusercontent.com/{repo_path}/{branch}/{fname}'
@@ -1598,13 +1455,11 @@ def fetch_github_repo(github_url):
             if not readme_text:
                 print("  ⚠️  README: not found")
 
-        # ── 3. Languages ──────────────────────────────────────────────
         r3 = requests.get(f'https://api.github.com/repos/{repo_path}/languages',
                           headers=headers, timeout=10)
         languages = list(r3.json().keys()) if r3.status_code == 200 else []
         print(f"  ✅ Languages: {languages}")
 
-        # ── 4. File tree ──────────────────────────────────────────────
         file_tree = []
         default_branch = repo.get('default_branch', 'main')
         r4 = requests.get(
@@ -1741,11 +1596,11 @@ JSON only (no markdown):
         return result
     return {
         "total_score": 50, "cv_ready": False,
-        "verdict": "Không thể đánh giá - vui lòng cấu hình GROQ_API_KEY",
+        "verdict": "Không thể đánh giá - vui lòng cấu hình CLAUDE_API_KEY",
         "scores": {k: {"score": 10, "comment": "Cần AI API"} for k in
                    ["readme_quality","code_structure","technical_relevance","problem_impact","completeness"]},
         "strengths": ["Đã có project để showcase"],
-        "improvements": [{"priority": "high", "action": "Cấu hình GROQ_API_KEY", "reason": "Cần AI để evaluate"}],
+        "improvements": [{"priority": "high", "action": "Cấu hình CLAUDE_API_KEY", "reason": "Cần AI để evaluate"}],
         "cv_bullet": "Built [project] using [tech] to solve [problem]"
     }
 
