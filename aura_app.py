@@ -396,6 +396,11 @@ Lưu ý:
     
     if result and 'skills' in result:
         skills = result['skills']
+        total_jobs = len(jobs)
+        # Recalculate percentage from job_count to avoid AI hallucinating wrong numbers
+        for s in skills:
+            job_count = s.get('job_count', 0)
+            s['percentage'] = round(job_count / total_jobs * 100, 1) if total_jobs > 0 else 0
         print(f"✅ Gemini extracted {len(skills)} skills:")
         for s in skills[:10]:
             print(f"   • {s['skill']}: {s['percentage']}% ({s['job_count']} jobs) [{s['category']}]")
@@ -1516,53 +1521,135 @@ def get_roadmap():
         'artifacts': artifacts
     })
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-
 # ─────────────────────────────────────────────────────────────
 # PHASE 4: ARTIFACT SUBMISSION & CV-READINESS EVALUATION
 # ─────────────────────────────────────────────────────────────
 
+def _github_headers():
+    """Build GitHub API headers, attach token if available."""
+    headers = {
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'Aura-App/1.0',
+    }
+    token = os.getenv('GITHUB_TOKEN', '').strip()
+    if token:
+        headers['Authorization'] = f'token {token}'
+        print(f"  🔑 GitHub token: attached ({token[:6]}...)")
+    else:
+        print("  ⚠️  GitHub token: MISSING — unauthenticated (60 req/hr limit)")
+    return headers
+
+
+def _github_error_message(status_code, response_body=''):
+    """Return human-friendly error message for GitHub API status codes."""
+    if status_code == 401:
+        return ('GitHub token không hợp lệ hoặc đã hết hạn. '
+                'Vào GitHub → Settings → Developer settings → Personal access tokens → tạo token mới, '
+                'rồi set GITHUB_TOKEN=<token> trong file .env')
+    if status_code == 403:
+        # Check if it's rate limit
+        if 'rate limit' in response_body.lower() or 'api rate limit' in response_body.lower():
+            return ('GitHub API rate limit exceeded (60 req/giờ với unauthenticated). '
+                    'Fix: Tạo GitHub Personal Access Token (free) và set GITHUB_TOKEN=<token> trong .env. '
+                    'Với token, limit tăng lên 5000 req/giờ.')
+        return ('GitHub API trả về 403 Forbidden. Nguyên nhân có thể: '
+                '(1) Rate limit — set GITHUB_TOKEN trong .env để fix, '
+                '(2) Repo bị hạn chế truy cập. '
+                'Tạo token tại: github.com/settings/tokens')
+    if status_code == 404:
+        return 'Repo không tìm thấy. Kiểm tra URL hoặc repo có thể là private (cần GITHUB_TOKEN).'
+    if status_code == 422:
+        return 'GitHub API: Unprocessable Entity — repo có thể rỗng hoặc không có commits.'
+    return f'GitHub API lỗi {status_code}. Thử lại sau hoặc kiểm tra GITHUB_TOKEN trong .env.'
+
+
 def fetch_github_repo(github_url):
     import re as _re
     match = _re.search(r'github\.com/([^/\s?#]+/[^/\s?#]+)', github_url)
-    if match:
-        repo_path = match.group(1).rstrip('/')
-    else:
+    if not match:
         return {'success': False, 'message': 'URL GitHub không hợp lệ. Ví dụ: https://github.com/user/repo'}
 
-    headers = {'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'Aura-App'}
-    github_token = os.getenv('GITHUB_TOKEN', '')
-    if github_token:
-        headers['Authorization'] = f'token {github_token}'
+    repo_path = match.group(1).rstrip('/')
+    repo_path = re.sub(r'\.git$', '', repo_path)  # strip trailing .git if any
+    print(f"\n📦 Fetching GitHub repo: {repo_path}")
+
+    headers = _github_headers()
 
     try:
-        r = requests.get(f'https://api.github.com/repos/{repo_path}', headers=headers, timeout=10)
-        if r.status_code == 404:
-            return {'success': False, 'message': 'Repo không tìm thấy hoặc là private repo'}
-        if r.status_code != 200:
-            return {'success': False, 'message': f'GitHub API lỗi {r.status_code}'}
-        repo = r.json()
+        # ── 1. Repo metadata ──────────────────────────────────────────
+        r = requests.get(f'https://api.github.com/repos/{repo_path}',
+                         headers=headers, timeout=15)
 
+        if r.status_code != 200:
+            msg = _github_error_message(r.status_code, r.text)
+            print(f"  ❌ Repo fetch failed: {r.status_code}")
+            # Log rate limit headers if present
+            remaining = r.headers.get('X-RateLimit-Remaining', '?')
+            reset_ts  = r.headers.get('X-RateLimit-Reset', '')
+            if reset_ts:
+                import datetime as _dt
+                reset_time = _dt.datetime.fromtimestamp(int(reset_ts)).strftime('%H:%M:%S')
+                print(f"  Rate limit remaining: {remaining} | Resets at: {reset_time}")
+            return {'success': False, 'message': msg}
+
+        repo = r.json()
+        print(f"  ✅ Repo found: {repo.get('full_name')} ({'private' if repo.get('private') else 'public'})")
+
+        # ── 2. README ─────────────────────────────────────────────────
         readme_text = ''
-        r2 = requests.get(f'https://api.github.com/repos/{repo_path}/readme',
-                          headers={**headers, 'Accept': 'application/vnd.github.v3.raw'}, timeout=10)
+
+        # Try API first (works for both public & private with token)
+        r2 = requests.get(
+            f'https://api.github.com/repos/{repo_path}/readme',
+            headers={**headers, 'Accept': 'application/vnd.github.v3.raw'},
+            timeout=10
+        )
         if r2.status_code == 200:
             readme_text = r2.text[:8000]
+            print(f"  ✅ README: {len(readme_text)} chars (via API)")
+        else:
+            # Fallback: try raw.githubusercontent.com for public repos
+            for branch in ('main', 'master'):
+                for fname in ('README.md', 'readme.md', 'README.MD'):
+                    raw_url = f'https://raw.githubusercontent.com/{repo_path}/{branch}/{fname}'
+                    try:
+                        r_raw = requests.get(raw_url, timeout=8)
+                        if r_raw.status_code == 200:
+                            readme_text = r_raw.text[:8000]
+                            print(f"  ✅ README: {len(readme_text)} chars (via raw, {branch}/{fname})")
+                            break
+                    except Exception:
+                        pass
+                if readme_text:
+                    break
+            if not readme_text:
+                print("  ⚠️  README: not found")
 
-        r3 = requests.get(f'https://api.github.com/repos/{repo_path}/languages', headers=headers, timeout=10)
+        # ── 3. Languages ──────────────────────────────────────────────
+        r3 = requests.get(f'https://api.github.com/repos/{repo_path}/languages',
+                          headers=headers, timeout=10)
         languages = list(r3.json().keys()) if r3.status_code == 200 else []
+        print(f"  ✅ Languages: {languages}")
 
-        r4 = requests.get(f'https://api.github.com/repos/{repo_path}/git/trees/HEAD', headers=headers, timeout=10)
+        # ── 4. File tree ──────────────────────────────────────────────
         file_tree = []
+        default_branch = repo.get('default_branch', 'main')
+        r4 = requests.get(
+            f'https://api.github.com/repos/{repo_path}/git/trees/{default_branch}',
+            headers=headers, timeout=10
+        )
         if r4.status_code == 200:
             file_tree = [f['path'] for f in r4.json().get('tree', [])[:40]]
+        elif r4.status_code == 409:
+            print("  ⚠️  File tree: repo is empty (no commits)")
+        else:
+            print(f"  ⚠️  File tree: {r4.status_code}")
 
         return {
             'success': True,
             'repo_path': repo_path,
             'name': repo.get('name', ''),
-            'description': repo.get('description', ''),
+            'description': repo.get('description', '') or '',
             'stars': repo.get('stargazers_count', 0),
             'forks': repo.get('forks_count', 0),
             'updated_at': repo.get('updated_at', ''),
@@ -1573,6 +1660,11 @@ def fetch_github_repo(github_url):
             'file_tree': file_tree,
             'open_issues': repo.get('open_issues_count', 0),
         }
+
+    except requests.exceptions.Timeout:
+        return {'success': False, 'message': 'GitHub API timeout. Kiểm tra kết nối mạng và thử lại.'}
+    except requests.exceptions.ConnectionError:
+        return {'success': False, 'message': 'Không thể kết nối GitHub API. Kiểm tra internet.'}
     except Exception as e:
         return {'success': False, 'message': f'Lỗi fetch GitHub: {str(e)}'}
 
@@ -1732,3 +1824,6 @@ def api_evaluate_artifact():
     return jsonify({'success': True, 'result': result,
                     'repo_name': repo_info.get('name',''),
                     'repo_path': repo_info.get('repo_path','')})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
