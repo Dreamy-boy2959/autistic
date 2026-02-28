@@ -642,30 +642,10 @@ def generate_technical_challenge(job_title, top_skills):
     challenge = {
         'job_title': job_title,
         'skills_tested': [q['skill'] for q in selected_questions],
-        'scenario': generate_scenario(job_title, matched_skills),
         'questions': selected_questions
     }
     
     return challenge
-
-def generate_scenario(job_title, matched_skills):
-    """Generate scenario text based on job title"""
-    skill_names = [s['skill'] for s in matched_skills[:5]]
-    
-    scenario = f"""
-🎯 Technical Challenge for: {job_title}
-
-Top skills required in market: {', '.join(skill_names)}
-
-Dưới đây là {len(matched_skills)} câu hỏi technical để đánh giá hiểu biết của bạn về các skills quan trọng nhất.
-Mỗi câu hỏi yêu cầu bạn phải:
-- Giải thích technical concepts
-- Phân tích trade-offs
-- Đưa ra quyết định có lý do
-
-Hãy trả lời chi tiết và chứng minh bạn hiểu rõ WHY, không chỉ WHAT.
-"""
-    return scenario.strip()
 
 def generate_fallback_challenge(job_title, top_skills):
     """Fallback when question bank not available - use generic questions"""
@@ -674,13 +654,6 @@ def generate_fallback_challenge(job_title, top_skills):
     challenge = {
         'job_title': job_title,
         'skills_tested': skill_list,
-        'scenario': f"""
-🎯 Technical Challenge for: {job_title}
-
-Top skills: {', '.join(skill_list)}
-
-Trả lời các câu hỏi sau để chứng minh hiểu biết technical và khả năng phân tích trade-offs.
-""",
         'questions': [
             {
                 'id': 1,
@@ -1600,7 +1573,7 @@ def fetch_github_repo(github_url):
 
         # Try API first (works for both public & private with token)
         r2 = requests.get(
-            f'https://api.github.com/repos/{repo_path}/readme',
+            f'https://api.github.com/repos/{repo_path}/README',
             headers={**headers, 'Accept': 'application/vnd.github.v3.raw'},
             timeout=10
         )
@@ -1825,5 +1798,5 @@ def api_evaluate_artifact():
                     'repo_name': repo_info.get('name',''),
                     'repo_path': repo_info.get('repo_path','')})
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
