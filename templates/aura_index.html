@@ -289,59 +289,6 @@
             color: #667eea;
             margin-bottom: 15px;
         }
-
-        /* Dev Mode */
-        #devPanel {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #1a1a2e;
-            color: #00ff88;
-            border-radius: 12px;
-            padding: 15px 20px;
-            font-family: monospace;
-            font-size: 0.85em;
-            z-index: 9999;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            min-width: 220px;
-        }
-        #devPanel h4 {
-            color: #fff;
-            margin-bottom: 10px;
-            font-size: 0.95em;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        #devPanel button {
-            display: block;
-            width: 100%;
-            margin: 5px 0;
-            padding: 6px 10px;
-            background: #16213e;
-            color: #00ff88;
-            border: 1px solid #00ff88;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: monospace;
-            font-size: 0.85em;
-            text-align: left;
-        }
-        #devPanel button:hover { background: #00ff88; color: #1a1a2e; }
-        #devToggleBtn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #1a1a2e;
-            color: #00ff88;
-            border: 2px solid #00ff88;
-            border-radius: 8px;
-            padding: 8px 14px;
-            font-family: monospace;
-            font-size: 0.8em;
-            cursor: pointer;
-            z-index: 9999;
-        }
         .btn-back {
             background: #f1f3f5;
             color: #495057;
@@ -449,7 +396,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌟 Aura</h1>
+            <h1>Aura</h1>
             <p class="tagline">AI Career Coach - 4 Bước Từ Zero Đến Job-Ready</p>
         </div>
 
@@ -474,22 +421,22 @@
 
         <!-- Phase 1: Market Analysis -->
         <div class="card active" id="card1">
-            <h2 class="card-title">📊 Phase 1: Phân tích thị trường việc làm</h2>
+            <h2 class="card-title">Giai đoạn 1: Phân tích thị trường việc làm</h2>
             <p style="margin-bottom: 20px; color: #666;">Nhập vị trí công việc mục tiêu, Aura sẽ phân tích 30 tin tuyển dụng để tìm ra skills quan trọng nhất.</p>
-            
+
             <div class="input-group">
                 <input type="text" id="jobTitle" placeholder="Ví dụ: Python Developer, Frontend Engineer..." />
             </div>
-            
-            <button class="btn" onclick="analyzeMarket()">🚀 Bắt đầu phân tích</button>
-            
+
+            <button class="btn" onclick="analyzeMarket()">Bắt đầu phân tích</button>
+
             <div id="loadingAnalysis" class="loading" style="display: none;">
                 <div class="spinner"></div>
                 <p>Đang phân tích VietnamWorks...</p>
             </div>
-            
+
             <div id="marketResults" style="display: none; margin-top: 30px;">
-                <h3 style="color: #667eea; margin-bottom: 20px;">✅ Top Skills Required:</h3>
+                <h3 style="color: #667eea; margin-bottom: 20px;">Các kĩ năng hàng đầu:</h3>
                 <div id="marketSkills"></div>
                 <button class="btn" style="margin-top: 20px;" onclick="goToPhase(2)">Tiếp tục →</button>
             </div>
@@ -497,21 +444,21 @@
 
         <!-- Phase 2: Skill Test -->
         <div class="card" id="card2">
-            <h2 class="card-title">🎯 Phase 2: Technical Skill Assessment</h2>
+            <h2 class="card-title">Giai đoạn 2: Đánh giá kĩ năng</h2>
             <p style="margin-bottom: 20px; color: #666;">Trả lời 5 câu hỏi technical để đánh giá mức độ hiểu biết của bạn.</p>
-            
+
             <div id="challengeScenario" style="background: #f0f7ff; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
-                <h3 style="color: #667eea;">📋 Scenario</h3>
+                <h3 style="color: #667eea;">Scenario</h3>
                 <div id="scenarioText" style="line-height: 1.8; color: #333; margin-top: 10px;"></div>
             </div>
-            
+
             <div id="challengeQuestions"></div>
-            
+
             <div style="display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-top:20px;">
                 <button class="btn btn-back" onclick="goBack()">← Quay lại</button>
                 <button class="btn" onclick="submitChallenge()">Hoàn thành đánh giá →</button>
             </div>
-            
+
             <div id="loadingEvaluation" class="loading" style="display: none;">
                 <div class="spinner"></div>
                 <p>AI đang đánh giá câu trả lời...</p>
@@ -520,16 +467,16 @@
 
         <!-- Phase 3: Results & Decision -->
         <div class="card" id="card3">
-            <h2 class="card-title">📈 Phase 3: Kết quả đánh giá</h2>
-            
+            <h2 class="card-title">Giai đoạn 3: Kết quả đánh giá</h2>
+
             <div id="evaluationResults"></div>
-            
+
             <div id="decisionBox" style="display: none;"></div>
-            
+
             <div id="learningSuggestionsSection" style="display: none;"></div>
-            
+
             <div id="roadmapSection" style="display: none;">
-                <h3 style="color: #667eea; margin: 30px 0 20px;">📚 Lộ trình học tập của bạn:</h3>
+                <h3 style="color: #667eea; margin: 30px 0 20px;">Lộ trình học tập của bạn:</h3>
                 <div id="roadmapContent"></div>
                 <div style="display:flex; align-items:center; gap:10px; margin-top:20px;">
                     <button class="btn btn-back" onclick="goBack()">← Quay lại</button>
@@ -540,7 +487,7 @@
 
         <!-- Phase 4: Artifact Submission & Evaluation -->
         <div class="card" id="card4">
-            <h2 class="card-title">🚀 Phase 4: Artifact Submission — CV Readiness Check</h2>
+            <h2 class="card-title">Giai đoạn 4: Artifact Submission — CV Readiness Check</h2>
 
             <!-- Step 4a: Ideas + Submit form -->
             <div id="phase4Step1">
@@ -549,7 +496,7 @@
                 <div id="artifactIdeas"></div>
 
                 <div style="margin-top:35px; background:#f8f9fa; border-radius:15px; padding:30px; border-left:5px solid #667eea;">
-                    <h3 style="color:#667eea; margin-bottom:20px;">📤 Submit Artifact của bạn</h3>
+                    <h3 style="color:#667eea; margin-bottom:20px;">Submit Artifact của bạn</h3>
 
                     <div class="input-group">
                         <label style="font-weight:600; color:#333; display:block; margin-bottom:8px;">GitHub Repository URL *</label>
@@ -568,7 +515,7 @@
 
                     <div id="repoPreview" style="display:none; margin-top:20px; background:white; border-radius:10px; padding:20px; border:2px solid #4ade80;">
                         <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-                            <span style="font-size:1.5em;">✅</span>
+                            <span style="color:#4ade80; font-weight:bold; font-size:1.2em;">OK</span>
                             <strong id="repoPreviewName" style="color:#333;"></strong>
                         </div>
                         <div id="repoPreviewDetails" style="color:#666; font-size:0.9em;"></div>
@@ -581,7 +528,7 @@
 
                     <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
                         <button class="btn btn-back" onclick="goBack()">← Quay lại</button>
-                        <button class="btn" onclick="fetchAndProceed()">🔍 Fetch & Tiếp tục →</button>
+                        <button class="btn" onclick="fetchAndProceed()">Fetch & Tiếp tục →</button>
                     </div>
                 </div>
             </div>
@@ -589,11 +536,11 @@
             <!-- Step 4b: Follow-up questions -->
             <div id="phase4Step2" style="display:none;">
                 <div style="background:#f0f7ff; border-radius:15px; padding:25px; margin-bottom:25px;">
-                    <h3 style="color:#667eea; margin-bottom:8px;">🎯 AI đã đọc repo của bạn</h3>
+                    <h3 style="color:#667eea; margin-bottom:8px;">AI đã đọc repo của bạn</h3>
                     <p style="color:#666;" id="step2RepoSummary"></p>
                 </div>
 
-                <h3 style="color:#333; margin-bottom:20px;">💬 Trả lời 3 câu hỏi về project</h3>
+                <h3 style="color:#333; margin-bottom:20px;">Trả lời 3 câu hỏi về project</h3>
                 <p style="color:#666; margin-bottom:25px;">AI sẽ hỏi những gì nhà tuyển dụng thường hỏi trong interview. Trả lời thành thật, không cần viết dài.</p>
 
                 <div id="followupQuestions"></div>
@@ -605,7 +552,7 @@
 
                 <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
                     <button class="btn btn-back" onclick="backToStep1()">← Sửa lại</button>
-                    <button class="btn" onclick="submitArtifactEval()">🚀 Evaluate ngay →</button>
+                    <button class="btn" onclick="submitArtifactEval()">Evaluate ngay →</button>
                 </div>
             </div>
 
@@ -624,25 +571,6 @@
         </div>
     </div>
 
-    <!-- Dev Panel Toggle Button -->
-    <button id="devToggleBtn" onclick="toggleDevPanel()" title="Developer Mode">🛠 DEV</button>
-
-    <!-- Dev Panel -->
-    <div id="devPanel" style="display:none;">
-        <h4>🛠 Dev Mode <span onclick="toggleDevPanel()" style="cursor:pointer;color:#aaa;">✕</span></h4>
-        <button onclick="devSkipToPhase(1)">→ Phase 1 (reset)</button>
-        <button onclick="devSkipToPhase(2)">→ Phase 2 (mock challenge)</button>
-        <button onclick="devSkipToPhase(3)">→ Phase 3 (mock results)</button>
-        <button onclick="devSkipToPhase(4)">→ Phase 4 (artifact form)</button>
-        <button onclick="devSkipToArtifactResult()">→ Phase 4 (mock result)</button>
-        <hr style="border-color:#333; margin:8px 0;">
-        <div style="color:#aaa;font-size:0.78em;margin-bottom:4px;">📂 Session History (max 5):</div>
-        <div id="devHistoryList"></div>
-        <hr style="border-color:#333; margin:8px 0;">
-        <button onclick="devClearSession()" style="border-color:#fbbf24; color:#fbbf24;">🗑 Clear current (archive)</button>
-        <button onclick="devClearAllHistory()" style="border-color:#ff6b6b; color:#ff6b6b;">💥 Clear ALL history</button>
-    </div>
-
     <script>
         let currentPhase = 1;
         let challengeData = null;
@@ -650,102 +578,39 @@
 
         // ── Session persistence ─────────────────────────────────────
         const SESSION_KEY = 'aura_session';
-        const SESSION_HISTORY_KEY = 'aura_session_history';
-        const MAX_HISTORY = 5;
-
+                
         function saveSession() {
             try {
-                const sessionData = {
-                    currentPhase,
-                    challengeData,
-                    evaluationData,
-                    savedAt: new Date().toISOString()
-                };
-                localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+                localStorage.setItem(SESSION_KEY, JSON.stringify({ currentPhase, challengeData, evaluationData }));
             } catch(e) {}
         }
 
-        function archiveCurrentSession() {
-            try {
-                const raw = localStorage.getItem(SESSION_KEY);
-                if (!raw) return;
-                const session = JSON.parse(raw);
-                if (!session.challengeData) return; // Don't archive empty sessions
-
-                const history = JSON.parse(localStorage.getItem(SESSION_HISTORY_KEY) || '[]');
-                // Avoid duplicate: same job title + same phase
-                const jobTitle = session.challengeData?.job_title || 'Unknown';
-                const duplicate = history.find(h => h.challengeData?.job_title === jobTitle && h.currentPhase === session.currentPhase);
-                if (!duplicate) {
-                    history.unshift(session);
-                    if (history.length > MAX_HISTORY) history.length = MAX_HISTORY;
-                    localStorage.setItem(SESSION_HISTORY_KEY, JSON.stringify(history));
-                }
-            } catch(e) {}
-        }
+        
 
         function loadSession() {
             try {
                 const raw = localStorage.getItem(SESSION_KEY);
                 if (!raw) return false;
                 const s = JSON.parse(raw);
-                currentPhase  = s.currentPhase  || 1;
-                challengeData  = s.challengeData  || null;
+                currentPhase = s.currentPhase || 1;
+                challengeData = s.challengeData || null;
                 evaluationData = s.evaluationData || null;
                 return true;
             } catch(e) { return false; }
         }
 
-        function restoreSession(index) {
-            try {
-                archiveCurrentSession(); // archive current before switching
-                const history = JSON.parse(localStorage.getItem(SESSION_HISTORY_KEY) || '[]');
-                const session = history[index];
-                if (!session) return;
-                // Save as current
-                localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-                currentPhase = session.currentPhase || 1;
-                challengeData = session.challengeData || null;
-                evaluationData = session.evaluationData || null;
-                goToPhase(currentPhase);
-                if (currentPhase >= 2 && session.challengeData) {
-                    document.getElementById('marketResults').style.display = 'block';
-                    const ms = document.getElementById('marketSkills');
-                    if (ms && !ms.innerHTML) ms.innerHTML = '<div style="color:#aaa;font-style:italic;">[restored from history]</div>';
-                }
-                toggleDevPanel();
-                renderHistoryList();
-            } catch(e) { alert('Lỗi restore session: ' + e.message); }
-        }
+        
 
-        function renderHistoryList() {
-            const container = document.getElementById('devHistoryList');
-            if (!container) return;
-            try {
-                const history = JSON.parse(localStorage.getItem(SESSION_HISTORY_KEY) || '[]');
-                if (history.length === 0) {
-                    container.innerHTML = '<div style="color:#666;font-size:0.8em;">Chưa có session nào.</div>';
-                    return;
-                }
-                let html = '';
-                history.forEach((s, i) => {
-                    const title = s.challengeData?.job_title || 'Unknown';
-                    const phase = s.currentPhase || 1;
-                    const date = s.savedAt ? new Date(s.savedAt).toLocaleString('vi-VN', {month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
-                    html += `<button onclick="restoreSession(${i})" title="Khôi phục session này">↩ ${title} (Phase ${phase}) ${date}</button>`;
-                });
-                container.innerHTML = html;
-            } catch(e) { container.innerHTML = '<div style="color:red;">Lỗi load history</div>'; }
-        }
+        
 
         // ── Navigation ──────────────────────────────────────────────
         function goToPhase(phase) {
             for (let i = 1; i <= 4; i++) {
-                const card   = document.getElementById(`card${i}`);
+                const card = document.getElementById(`card${i}`);
                 const phaseEl= document.getElementById(`phase${i}`);
                 card.classList.remove('active');
                 phaseEl.classList.remove('active', 'completed');
-                if (i < phase)       phaseEl.classList.add('completed');
+                if (i < phase) phaseEl.classList.add('completed');
                 else if (i === phase){ card.classList.add('active'); phaseEl.classList.add('active'); }
             }
             currentPhase = phase;
@@ -762,118 +627,10 @@
             if (currentPhase > 1) goToPhase(currentPhase - 1);
         }
 
-        // ── Dev Mode ────────────────────────────────────────────────
-        function toggleDevPanel() {
-            const p = document.getElementById('devPanel');
-            const b = document.getElementById('devToggleBtn');
-            const show = p.style.display === 'none';
-            p.style.display = show ? 'block' : 'none';
-            b.style.display = show ? 'none'  : 'block';
-            if (show) renderHistoryList();
-        }
-
-        function devClearSession() {
-            archiveCurrentSession();
-            localStorage.removeItem(SESSION_KEY);
-            challengeData = null; evaluationData = null; currentPhase = 1;
-            alert('Đã xoá session hiện tại! (Session cũ đã lưu vào history)');
-            location.reload();
-        }
-
-        function devClearAllHistory() {
-            localStorage.removeItem(SESSION_KEY);
-            localStorage.removeItem(SESSION_HISTORY_KEY);
-            challengeData = null; evaluationData = null; currentPhase = 1;
-            alert('Đã xoá tất cả session và history!');
-            location.reload();
-        }
-
-        // Mock data for dev skipping
-        const MOCK_CHALLENGE = {
-            scenario: "[DEV] Mock scenario – bỏ qua để test UI nhanh.",
-            questions: [
-                {id:1, skill:'Python', question:'Mock Q1 - Python', evaluation_criteria:['Concept','Trade-offs']},
-                {id:2, skill:'SQL',    question:'Mock Q2 - SQL',    evaluation_criteria:['Query optimization']},
-                {id:3, skill:'Docker', question:'Mock Q3 - Docker', evaluation_criteria:['Containerization']},
-                {id:4, skill:'React',  question:'Mock Q4 - React',  evaluation_criteria:['Component lifecycle']},
-                {id:5, skill:'System Design', question:'Mock Q5 - System Design', evaluation_criteria:['Scalability']},
-            ]
-        };
-        const MOCK_EVALUATION = {
-            evaluations: [
-                {question_id:1,question:'Mock Q1',score:4,level_name:'Proficient',feedback:'Mock feedback',strengths:['Good'],improvements:[]},
-                {question_id:2,question:'Mock Q2',score:3,level_name:'Competent',feedback:'Mock feedback',strengths:[],improvements:['More detail']},
-                {question_id:3,question:'Mock Q3',score:4,level_name:'Proficient',feedback:'Mock feedback',strengths:['Clear'],improvements:[]},
-                {question_id:4,question:'Mock Q4',score:5,level_name:'Expert',feedback:'Mock feedback',strengths:['Excellent'],improvements:[]},
-                {question_id:5,question:'Mock Q5',score:3,level_name:'Competent',feedback:'Mock feedback',strengths:[],improvements:['More depth']},
-            ],
-            skill_gaps: [],
-            roadmap: { status:'ready', daily_plan:[], message:'Mock ready', total_days:0 },
-            artifacts: [
-                { id:'mock_001', title:'Mock CRUD App', tagline:'A simple task manager', description:'A simple CRUD app', 
-                  tech_stack:{required:['Python','React'], bonus:['Docker']}, difficulty:'medium', estimated_days:5,
-                  core_features:['Create','Read','Update','Delete'], bonus_features:['Auth'],
-                  why_cv_worthy:'Shows full-stack skills end-to-end' }
-            ],
-            learning_suggestions: []
-        };
-
-        function devSkipToPhase(phase) {
-            if (phase === 1) { devClearSession(); return; }
-            archiveCurrentSession();
-
-            if (!challengeData)  challengeData  = MOCK_CHALLENGE;
-            if (!evaluationData) evaluationData = MOCK_EVALUATION;
-
-            if (phase >= 2) {
-                const ms = document.getElementById('marketSkills');
-                if (ms && !ms.innerHTML) ms.innerHTML = '<div style="color:#aaa;font-style:italic;">[DEV: mock market data]</div>';
-                document.getElementById('marketResults').style.display = 'block';
-            }
-
-            goToPhase(phase);
-            toggleDevPanel();
-        }
-
-        function devSkipToArtifactResult() {
-            archiveCurrentSession();
-            if (!challengeData)  challengeData  = MOCK_CHALLENGE;
-            if (!evaluationData) evaluationData = MOCK_EVALUATION;
-            document.getElementById('marketResults').style.display = 'block';
-            goToPhase(4);
-
-            // Show mock artifact result directly
-            const mockResult = {
-                total_score: 72,
-                cv_ready: true,
-                verdict: "Project có nền tảng tốt, README rõ ràng và tech stack phù hợp market. Thêm unit tests sẽ nâng cao đáng kể chất lượng.",
-                scores: {
-                    readme_quality: {score: 16, comment: "README có setup instructions và feature list nhưng thiếu screenshots."},
-                    code_structure: {score: 14, comment: "Folder structure hợp lý, tuy nhiên một số function quá dài."},
-                    technical_relevance: {score: 15, comment: "Tech stack match tốt với market demand cho vị trí này."},
-                    problem_impact: {score: 14, comment: "Candidate articulate được use case nhưng chưa rõ impact cụ thể."},
-                    completeness: {score: 13, comment: "App chạy được, có demo link. Thiếu error handling ở một số chỗ."},
-                },
-                strengths: ["Tech stack modern và phù hợp job market", "README có đủ thông tin cơ bản", "Có live demo — cộng điểm lớn với recruiter"],
-                improvements: [
-                    {priority: "high", action: "Thêm ít nhất 5-10 unit tests", reason: "Tests là signal quan trọng với engineer interviewer"},
-                    {priority: "medium", action: "Thêm screenshots vào README", reason: "Visual giúp recruiter nhanh chóng hiểu project làm gì"},
-                    {priority: "low", action: "Thêm error handling và loading states", reason: "Cho thấy attention to detail"},
-                ],
-                cv_bullet: "Built a full-stack web application using React & Node.js that helps users manage tasks efficiently, featuring JWT authentication and real-time updates"
-            };
-            displayArtifactResult(mockResult, 'mock-project', 'username/mock-project');
-            document.getElementById('phase4Step1').style.display = 'none';
-            document.getElementById('phase4Step2').style.display = 'none';
-            document.getElementById('phase4Step3').style.display = 'block';
-            toggleDevPanel();
-        }
-
         // ── Market Analysis ─────────────────────────────────────────
         async function analyzeMarket() {
             const jobTitle = document.getElementById('jobTitle').value.trim();
             if (!jobTitle) { alert('Vui lòng nhập tên nghề!'); return; }
-            archiveCurrentSession(); // save old session before new one
             document.getElementById('loadingAnalysis').style.display = 'block';
             try {
                 const response = await fetch('/api/analyze', {
@@ -943,7 +700,7 @@
 
         function displayEvaluationResults(data) {
             const container = document.getElementById('evaluationResults');
-            let html = '<h3 style="color: #667eea; margin-bottom: 20px;">📝 Kết quả từng câu:</h3>';
+            let html = '<h3 style="color: #667eea; margin-bottom: 20px;">Kết quả từng câu:</h3>';
             const scores = [];
             data.evaluations.forEach((ev, idx) => {
                 scores.push(ev.score);
@@ -951,17 +708,17 @@
                     <div class="evaluation-result">
                         <h4>Câu ${idx + 1}: ${ev.score}/5 - ${ev.level_name || 'Level ' + ev.score}</h4>
                         <p style="margin: 10px 0;"><strong>Feedback:</strong> ${ev.feedback}</p>
-                        ${ev.strengths.length > 0 ? `<p><strong>✅ Strengths:</strong> ${ev.strengths.join(', ')}</p>` : ''}
-                        ${ev.improvements.length > 0 ? `<p><strong>💡 Improvements:</strong> ${ev.improvements.join(', ')}</p>` : ''}
+                        ${ev.strengths.length > 0 ? `<p><strong>Strengths:</strong> ${ev.strengths.join(', ')}</p>` : ''}
+                        ${ev.improvements.length > 0 ? `<p><strong>Improvements:</strong> ${ev.improvements.join(', ')}</p>` : ''}
                     </div>`;
             });
             const avgScore = scores.reduce((a,b) => a+b, 0) / scores.length;
             const minScore = Math.min(...scores);
             html += `
                 <div style="background: #f0f7ff; padding: 25px; border-radius: 10px; margin-top: 30px; text-align: center;">
-                    <h3 style="color: #667eea;">📊 Tổng kết:</h3>
+                    <h3 style="color: #667eea;">Tổng kết:</h3>
                     <div class="score-display">${avgScore.toFixed(1)}/5.0</div>
-                    <p style="color: #666;">Average Score | Min: ${minScore}/5</p>
+                    <p style="color: #666;">Trung Bình | Thấp nhất: ${minScore}/5</p>
                 </div>`;
             container.innerHTML = html;
             showDecision(avgScore, minScore, data);
@@ -973,7 +730,7 @@
         function displayLearningSuggestions(suggestions) {
             const container = document.getElementById('learningSuggestionsSection');
             if (!container) return;
-            let html = '<h3 style="color: #667eea; margin: 30px 0 20px;">📚 Chi tiết học tập cho từng kĩ năng:</h3>';
+            let html = '<h3 style="color: #667eea; margin: 30px 0 20px;">Chi tiết học tập cho từng kĩ năng:</h3>';
             suggestions.forEach((sug, idx) => {
                 const isAdvanced = sug.current_score >= 3;
                 const bgColor = isAdvanced ? '#f0fdf4' : '#fef3c7';
@@ -987,23 +744,23 @@
                             </span>
                         </div>
                         ${isAdvanced ?
-                            '<p style="color: #15803d; margin-bottom: 15px;"><strong>✅ Optional:</strong> Bạn đã competent, có thể học thêm để lên Expert hoặc skip để làm artifact.</p>' :
-                            '<p style="color: #92400e; margin-bottom: 15px;"><strong>📖 Required:</strong> Cần học để đạt mức competent (3/5).</p>'
+                            '<p style="color: #15803d; margin-bottom: 15px;"><strong>Optional:</strong> Bạn đã competent, có thể học thêm để lên Expert hoặc skip để làm artifact.</p>' :
+                            '<p style="color: #92400e; margin-bottom: 15px;"><strong>Required:</strong> Cần học để đạt mức competent (3/5).</p>'
                         }
                         <div style="margin-bottom: 15px;">
-                            <strong style="color: #333;">📖 Topics cần học:</strong>
+                            <strong style="color: #333;">Topics cần học:</strong>
                             <ul style="margin: 10px 0 0 20px; line-height: 1.8;">${sug.topics_to_learn.map(t => `<li>${t}</li>`).join('')}</ul>
                         </div>
                         <div style="margin-bottom: 15px;">
-                            <strong style="color: #333;">📚 Resources:</strong>
+                            <strong style="color: #333;">Resources:</strong>
                             <ul style="margin: 10px 0 0 20px; line-height: 1.8;">${sug.resources.map(r => `<li>${r}</li>`).join('')}</ul>
                         </div>
                         <div style="margin-bottom: 15px;">
-                            <strong style="color: #333;">💪 Practice:</strong>
+                            <strong style="color: #333;">Practice:</strong>
                             <ul style="margin: 10px 0 0 20px; line-height: 1.8;">${sug.practice.map(p => `<li>${p}</li>`).join('')}</ul>
                         </div>
                         <p style="margin-top: 15px; color: #666;">
-                            <strong>⏱️ Estimated time:</strong> ${sug.estimated_time}
+                            <strong>⏱ Estimated time:</strong> ${sug.estimated_time}
                             ${sug.method === 'ai_personalized' ? ' <span style="color: #667eea;">(AI-personalized)</span>' : ''}
                         </p>
                     </div>`;
@@ -1017,7 +774,7 @@
             if (avgScore >= 3.5 && minScore >= 2.5) {
                 decisionBox.innerHTML = `
                     <div class="decision-box">
-                        <h3>🎉 Excellent! Bạn đã sẵn sàng!</h3>
+                        <h3>Excellent! Bạn đã sẵn sàng!</h3>
                         <p style="font-size: 1.1em; color: #92400e; margin: 20px 0;">
                             Average: ${avgScore.toFixed(1)}/5 | Min: ${minScore}/5<br>
                             Bạn đã có đủ kĩ năng để bắt đầu làm artifact!
@@ -1030,23 +787,22 @@
             } else if (avgScore >= 3.0) {
                 decisionBox.innerHTML = `
                     <div class="decision-box">
-                        <h3>👍 Good! Cần củng cố thêm</h3>
+                        <h3>Good! Cần củng cố thêm</h3>
                         <p style="font-size: 1.1em; color: #92400e; margin: 20px 0;">
                             Average: ${avgScore.toFixed(1)}/5 | Min: ${minScore}/5<br>
                             Học thêm 3 ngày để strengthen skills
                         </p>
-                        <button class="btn" onclick="showRoadmap(${JSON.stringify(data).replace(/"/g, '&quot;')}, 3)">Xem lộ trình 3 ngày</button>
                     </div>`;
                 showRoadmap(data, 3);
             } else {
                 decisionBox.innerHTML = `
                     <div class="decision-box">
-                        <h3>📚 Cần học thêm</h3>
+                        <h3>Cần học thêm</h3>
                         <p style="font-size: 1.1em; color: #92400e; margin: 20px 0;">
                             Average: ${avgScore.toFixed(1)}/5 | Min: ${minScore}/5<br>
                             Học 7 ngày để build nền tảng vững chắc
                         </p>
-                        <button class="btn" onclick="showRoadmap(${JSON.stringify(data).replace(/"/g, '&quot;')}, 7)">Xem lộ trình 7 ngày</button>
+
                     </div>`;
                 showRoadmap(data, 7);
             }
@@ -1054,8 +810,8 @@
         }
 
         function showRoadmap(data, days) {
-            const roadmapSection  = document.getElementById('roadmapSection');
-            const roadmapContent  = document.getElementById('roadmapContent');
+            const roadmapSection = document.getElementById('roadmapSection');
+            const roadmapContent = document.getElementById('roadmapContent');
             if (!data.roadmap || !data.roadmap.daily_plan) {
                 roadmapContent.innerHTML = '<p>Không có lộ trình.</p>';
                 return;
@@ -1064,10 +820,10 @@
             data.roadmap.daily_plan.forEach(day => {
                 html += `
                     <div class="roadmap-day">
-                        <h4>📅 Ngày ${day.day}: ${day.title}</h4>
+                        <h4>Ngày ${day.day}: ${day.title}</h4>
                         <p style="color: #666; margin: 10px 0;"><strong>Focus:</strong> ${day.focus}</p>
                         <p style="color: #667eea;"><strong>Skills:</strong> ${day.skills.join(', ')}</p>
-                        <div class="task-list">${day.tasks.map(t => `<div class="task-item">✓ ${t}</div>`).join('')}</div>
+                        <div class="task-list">${day.tasks.map(t => `<div class="task-item">${t}</div>`).join('')}</div>
                     </div>`;
             });
             roadmapContent.innerHTML = html;
@@ -1085,7 +841,7 @@
                 container.innerHTML = '<p style="color:#888;">Chưa có artifact ideas.</p>';
                 return;
             }
-            const difficultyLabel = { easy: '🟢 Dễ', medium: '🟡 Trung bình', hard: '🔴 Khó' };
+            const difficultyLabel = { easy: 'Dễ', medium: 'Trung bình', hard: 'Khó' };
             let html = '';
             artifacts.forEach((artifact, idx) => {
                 // tech_stack có thể là object {required:[], bonus:[]} hoặc array
@@ -1117,7 +873,7 @@
                         <ul style="margin-left: 20px; color: #666;">${features.map(f => `<li>${f}</li>`).join('')}</ul>` : ''}
                         ${bonusFeatures.length ? `<p style="margin: 10px 0; color:#888; font-size:0.9em;"><strong>Bonus:</strong> ${bonusFeatures.join(', ')}</p>` : ''}
                         ${showcase ? `<p style="margin-top: 12px; padding: 15px; background: #fef3c7; border-radius: 8px;">
-                            <strong>💡 Vì sao đáng để CV:</strong> ${showcase}
+                            <strong>Vì sao đáng để CV:</strong> ${showcase}
                         </p>` : ''}
                     </div>`;
             });
@@ -1153,14 +909,14 @@
                     body: JSON.stringify({github_url: githubUrl, demo_url: document.getElementById('demoUrl').value.trim()})
                 });
                 const d1 = await r1.json();
-                if (!d1.success) { alert('❌ ' + d1.message); return; }
+                if (!d1.success) { alert(' ' + d1.message); return; }
 
                 fetchedRepo = d1.repo;
                 document.getElementById('repoPreviewName').textContent = fetchedRepo.name;
                 document.getElementById('repoPreviewDetails').innerHTML =
                     `${fetchedRepo.languages.join(' · ')}` +
-                    ` ${fetchedRepo.has_readme ? '&nbsp;✅ README' : '&nbsp;❌ No README'}` +
-                    `${fetchedRepo.homepage ? '&nbsp;🌐 Demo' : ''}` +
+                    ` ${fetchedRepo.has_readme ? '&nbsp;README' : '&nbsp;No README'}` +
+                    `${fetchedRepo.homepage ? '&nbsp; Demo' : ''}` +
                     (fetchedRepo.description ? `<br><em>${fetchedRepo.description}</em>` : '');
                 document.getElementById('repoPreview').style.display = 'block';
 
@@ -1169,7 +925,7 @@
                     body: JSON.stringify({description})
                 });
                 const d2 = await r2.json();
-                if (!d2.success) { alert('❌ ' + d2.message); return; }
+                if (!d2.success) { alert(' ' + d2.message); return; }
 
                 artifactQuestions = d2.questions;
                 renderFollowupQuestions(artifactQuestions, fetchedRepo);
@@ -1184,9 +940,9 @@
 
         function renderFollowupQuestions(questions, repo) {
             const focusLabel = {
-                technical_depth: '🔧 Technical Depth',
-                decision_making: '🤔 Decision Making',
-                impact_and_value: '💡 Impact & Value'
+                technical_depth: ' Technical Depth',
+                decision_making: ' Decision Making',
+                impact_and_value: ' Impact & Value'
             };
             document.getElementById('step2RepoSummary').textContent =
                 `Repo: ${repo.name} | ${repo.languages.join(', ')} | ${repo.has_readme ? 'Có README' : 'Thiếu README'}${repo.homepage ? ' | Có demo' : ''}`;
@@ -1217,7 +973,7 @@
                     body: JSON.stringify({answers})
                 });
                 const d = await r.json();
-                if (!d.success) { alert('❌ ' + d.message); return; }
+                if (!d.success) { alert(' ' + d.message); return; }
 
                 displayArtifactResult(d.result, d.repo_name, d.repo_path);
                 document.getElementById('phase4Step2').style.display = 'none';
@@ -1233,24 +989,24 @@
             const score = result.total_score;
 
             document.getElementById('artifactVerdict').innerHTML = `
-                <div class="${pass ? 'verdict-pass' : 'verdict-fail'}">
-                    <div style="font-size:3em; margin-bottom:10px;">${pass ? '🎉' : '📋'}</div>
-                    <div class="score-ring ${pass ? 'pass' : 'fail'}">${score}</div>
-                    <h2 style="color:${pass ? '#15803d' : '#dc2626'}; margin:15px 0 10px;">
-                        ${pass ? '✅ CV-Ready!' : '❌ Chưa đủ tiêu chuẩn (cần ≥ 65/100)'}
+                <div class="">
+                    <div style="font-size:3em; margin-bottom:10px;"></div>
+                    <div class="score-ring ">${score}</div>
+                    <h2 style="color:; margin:15px 0 10px;">
+                        
                     </h2>
                     <p style="font-size:1.1em; color:#444; max-width:600px; margin:0 auto;">${result.verdict}</p>
-                    ${repoPath ? `<p style="margin-top:15px;"><a href="https://github.com/${repoPath}" target="_blank" style="color:#667eea; font-weight:600;">🔗 ${repoName}</a></p>` : ''}
+                    ${repoPath ? `<p style="margin-top:15px;"><a href="https://github.com/${repoPath}" target="_blank" style="color:#667eea; font-weight:600;">${repoName}</a></p>` : ''}
                 </div>`;
 
             const rubricKeys = {
-                readme_quality: '📄 README Quality',
-                code_structure: '🏗️ Code Structure',
-                technical_relevance: '⚡ Technical Relevance',
-                problem_impact: '🎯 Problem & Impact',
-                completeness: '✅ Completeness',
+                readme_quality: ' README Quality',
+                code_structure: ' Code Structure',
+                technical_relevance: ' Technical Relevance',
+                problem_impact: ' Problem & Impact',
+                completeness: ' Completeness',
             };
-            let rubricsHtml = '<h3 style="color:#333; margin-bottom:15px;">📊 Chi tiết điểm số:</h3><div class="rubric-grid">';
+            let rubricsHtml = '<h3 style="color:#333; margin-bottom:15px;">Chi tiết điểm số:</h3><div class="rubric-grid">';
             for (const [key, label] of Object.entries(rubricKeys)) {
                 const item = result.scores?.[key] || {score: 0, comment: ''};
                 const pct = (item.score / 20) * 100;
@@ -1268,16 +1024,16 @@
             document.getElementById('artifactScoreBreakdown').innerHTML = rubricsHtml;
 
             const strengthsHtml = result.strengths?.length
-                ? `<h3 style="color:#15803d; margin:25px 0 12px;">💪 Điểm mạnh:</h3>` +
-                  result.strengths.map(s => `<div style="display:flex; gap:10px; margin-bottom:8px;"><span style="color:#4ade80; font-size:1.2em; flex-shrink:0;">✓</span><span>${s}</span></div>`).join('')
+                ? `<h3 style="color:#15803d; margin:25px 0 12px;">Điểm mạnh:</h3>` +
+                  result.strengths.map(s => `<div style="display:flex; gap:10px; margin-bottom:8px;"><span style="color:#4ade80; font-weight:bold; flex-shrink:0;">✓</span><span>${s}</span></div>`).join('')
                 : '';
 
-            const priorityIcon = {high:'🔴', medium:'🟡', low:'🟢'};
+            const priorityIcon = {high:'[!]', medium:'[~]', low:'[ok]'};
             const improvementsHtml = result.improvements?.length
-                ? `<h3 style="color:#dc2626; margin:25px 0 12px;">📌 Cần cải thiện:</h3>` +
+                ? `<h3 style="color:#dc2626; margin:25px 0 12px;">Cần cải thiện:</h3>` +
                   result.improvements.map(i => `
                     <div class="improvement-card ${i.priority}">
-                        <span style="font-size:1.3em; flex-shrink:0;">${priorityIcon[i.priority]||'⚪'}</span>
+                        <span style="font-size:1.3em; flex-shrink:0;">${priorityIcon[i.priority]||'[-]'}</span>
                         <div><strong>${i.action}</strong><br><span style="color:#666; font-size:0.9em;">${i.reason}</span></div>
                     </div>`).join('')
                 : '';
@@ -1287,25 +1043,25 @@
             const cvText = result.cv_bullet || result.cv_tip || '';
             document.getElementById('artifactCvTip').innerHTML = cvText ? `
                 <div class="cv-tip-box">
-                    <h3 style="color:#7c3aed; margin-bottom:12px;">📝 Gợi ý viết lên CV:</h3>
+                    <h3 style="color:#7c3aed; margin-bottom:12px;">Gợi ý viết lên CV:</h3>
                     <p style="color:#4c1d95; font-style:italic; font-size:1.05em; line-height:1.6;">"${cvText}"</p>
-                    <p style="color:#6d28d9; font-size:0.85em; margin-top:10px;">💡 Copy đoạn trên vào CV, chỉnh số liệu cụ thể nếu có.</p>
+                    <p style="color:#6d28d9; font-size:0.85em; margin-top:10px;">Copy đoạn trên vào CV, chỉnh số liệu cụ thể nếu có.</p>
                 </div>` : '';
+        }
+
+        // ── Reset session ───────────────────────────────────────────
+        function resetSession() {
+            try { localStorage.removeItem(SESSION_KEY); } catch(e) {}
+            currentPhase = 1;
+            challengeData = null;
+            evaluationData = null;
         }
 
         // ── Init ────────────────────────────────────────────────────
         window.addEventListener('DOMContentLoaded', () => {
-            const restored = loadSession();
-            if (restored && currentPhase > 1) {
-                // Restore UI to saved phase
-                goToPhase(currentPhase);
-                // Restore Phase 1 market display if we have eval data
-                if (evaluationData) {
-                    document.getElementById('marketResults').style.display = 'block';
-                }
-            } else if (challengeData) {
-                displayChallengeQuestions();
-            }
+            // Luôn reset về phase 1 khi mở/refresh trang
+            resetSession();
+            goToPhase(1);
         });
     </script>
 </body>
