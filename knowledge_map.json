@@ -1,0 +1,368 @@
+{
+  "Python": {
+    "level_0_1": {
+      "current_level": "Beginner - Biết surface level",
+      "topics_to_learn": [
+        "Python syntax cơ bản: variables, data types, operators",
+        "Control flow: if/else, loops (for, while)",
+        "Functions: định nghĩa, parameters, return values",
+        "Data structures: lists, tuples, dictionaries, sets",
+        "File I/O: đọc/ghi files"
+      ],
+      "resources": [
+        "Python.org official tutorial",
+        "Codecademy Python course",
+        "Automate the Boring Stuff with Python (free book)"
+      ],
+      "practice": [
+        "Làm 50 bài tập trên HackerRank Python",
+        "Build: Calculator, To-do list CLI app"
+      ],
+      "estimated_time": "5-7 days"
+    },
+    "level_2": {
+      "current_level": "Elementary - Hiểu cơ bản nhưng thiếu depth",
+      "topics_to_learn": [
+        "OOP: classes, inheritance, polymorphism",
+        "Decorators và context managers",
+        "List comprehensions và generators",
+        "Exception handling best practices",
+        "Modules và packages",
+        "Virtual environments (venv, pip)"
+      ],
+      "resources": [
+        "Real Python tutorials",
+        "Python Tricks book by Dan Bader",
+        "Effective Python by Brett Slatkin"
+      ],
+      "practice": [
+        "Build REST API với Flask/FastAPI",
+        "Refactor code để dùng OOP patterns",
+        "Contribute to open source Python project"
+      ],
+      "estimated_time": "7-10 days"
+    }
+  },
+
+  "JavaScript": {
+    "level_0_1": {
+      "current_level": "Beginner",
+      "topics_to_learn": [
+        "JS syntax: variables (let/const), data types",
+        "Functions: arrow functions, callbacks",
+        "Arrays và objects",
+        "DOM manipulation basics",
+        "Event handling"
+      ],
+      "resources": [
+        "JavaScript.info",
+        "MDN Web Docs",
+        "Eloquent JavaScript (free book)"
+      ],
+      "practice": [
+        "30 bài JavaScript30 challenge",
+        "Build: Interactive todo app, Quiz app"
+      ],
+      "estimated_time": "5-7 days"
+    },
+    "level_2": {
+      "current_level": "Elementary",
+      "topics_to_learn": [
+        "Async JS: Promises, async/await",
+        "ES6+ features: destructuring, spread, modules",
+        "Closures và scope",
+        "Array methods: map, filter, reduce",
+        "Error handling",
+        "Fetch API và working with REST APIs"
+      ],
+      "resources": [
+        "You Don't Know JS book series",
+        "JavaScript: The Hard Parts (Frontend Masters)",
+        "Async JavaScript course"
+      ],
+      "practice": [
+        "Build app consuming public API",
+        "Implement promise-based utility functions",
+        "Create async data fetching library"
+      ],
+      "estimated_time": "7-10 days"
+    }
+  },
+
+  "React": {
+    "level_0_1": {
+      "current_level": "Beginner",
+      "topics_to_learn": [
+        "JSX syntax và React elements",
+        "Components: functional vs class",
+        "Props và one-way data flow",
+        "useState hook",
+        "Event handling trong React",
+        "Conditional rendering"
+      ],
+      "resources": [
+        "React official docs (new docs)",
+        "React tutorial for beginners",
+        "Scrimba React course"
+      ],
+      "practice": [
+        "Build 5 simple components",
+        "Todo app với React",
+        "Weather app với API"
+      ],
+      "estimated_time": "5-7 days"
+    },
+    "level_2": {
+      "current_level": "Elementary",
+      "topics_to_learn": [
+        "useEffect hook và lifecycle",
+        "Custom hooks",
+        "Component composition patterns",
+        "Forms và controlled components",
+        "React Router basics",
+        "State lifting và prop drilling"
+      ],
+      "resources": [
+        "Epic React by Kent C. Dodds",
+        "React hooks in depth",
+        "Thinking in React (official guide)"
+      ],
+      "practice": [
+        "Multi-page app với React Router",
+        "Form with validation",
+        "Create 3 custom hooks"
+      ],
+      "estimated_time": "7-10 days"
+    }
+  },
+
+  "SQL": {
+    "level_0_1": {
+      "current_level": "Beginner",
+      "topics_to_learn": [
+        "SELECT, WHERE, ORDER BY",
+        "INSERT, UPDATE, DELETE",
+        "Basic JOINs (INNER JOIN)",
+        "Aggregate functions: COUNT, SUM, AVG",
+        "GROUP BY và HAVING"
+      ],
+      "resources": [
+        "SQLZoo interactive tutorial",
+        "Mode Analytics SQL tutorial",
+        "W3Schools SQL"
+      ],
+      "practice": [
+        "50 SQL queries trên HackerRank",
+        "Analyze sample database (Northwind)",
+        "Write queries cho e-commerce scenario"
+      ],
+      "estimated_time": "5-7 days"
+    },
+    "level_2": {
+      "current_level": "Elementary",
+      "topics_to_learn": [
+        "All JOIN types: LEFT, RIGHT, FULL OUTER",
+        "Subqueries và CTEs (WITH clause)",
+        "Window functions: ROW_NUMBER, RANK",
+        "Indexes và query performance",
+        "Transactions và ACID properties",
+        "Database normalization (1NF, 2NF, 3NF)"
+      ],
+      "resources": [
+        "SQL Performance Explained book",
+        "Advanced SQL on Mode Analytics",
+        "Use The Index Luke website"
+      ],
+      "practice": [
+        "Design database schema for real app",
+        "Optimize slow queries",
+        "Write complex analytical queries"
+      ],
+      "estimated_time": "7-10 days"
+    }
+  },
+
+  "Docker": {
+    "level_0_1": {
+      "current_level": "Beginner",
+      "topics_to_learn": [
+        "Docker concepts: images, containers",
+        "Basic commands: run, ps, stop, rm",
+        "Pulling images từ Docker Hub",
+        "Port mapping và volumes",
+        "Simple Dockerfile"
+      ],
+      "resources": [
+        "Docker official docs Getting Started",
+        "Docker for Beginners (YouTube)",
+        "Play with Docker online"
+      ],
+      "practice": [
+        "Run 5 different containers",
+        "Write Dockerfile cho Python app",
+        "Containerize simple web app"
+      ],
+      "estimated_time": "3-5 days"
+    },
+    "level_2": {
+      "current_level": "Elementary",
+      "topics_to_learn": [
+        "Multi-stage builds",
+        "Docker Compose for multi-container apps",
+        ".dockerignore và optimization",
+        "Networking: bridge, host, overlay",
+        "Volumes và data persistence",
+        "Environment variables"
+      ],
+      "resources": [
+        "Docker Deep Dive book",
+        "Docker Mastery course",
+        "Best practices for writing Dockerfiles"
+      ],
+      "practice": [
+        "Compose file cho full-stack app (DB + API + Frontend)",
+        "Optimize image size (alpine, multi-stage)",
+        "Setup development environment với Docker"
+      ],
+      "estimated_time": "5-7 days"
+    }
+  },
+
+  "AWS": {
+    "level_0_1": {
+      "current_level": "Beginner",
+      "topics_to_learn": [
+        "AWS fundamentals: regions, AZs, IAM",
+        "EC2 basics: launch instance, SSH connect",
+        "S3: create bucket, upload files",
+        "Security groups và basic networking",
+        "Free tier limitations"
+      ],
+      "resources": [
+        "AWS Free Tier hands-on",
+        "A Cloud Guru beginner course",
+        "AWS official getting started guides"
+      ],
+      "practice": [
+        "Deploy static website on S3",
+        "Launch EC2 và run web server",
+        "Setup IAM users và policies"
+      ],
+      "estimated_time": "5-7 days"
+    },
+    "level_2": {
+      "current_level": "Elementary",
+      "topics_to_learn": [
+        "VPC, subnets, route tables",
+        "Load balancers (ALB, NLB)",
+        "Auto Scaling groups",
+        "RDS databases",
+        "CloudWatch monitoring",
+        "Lambda functions basics"
+      ],
+      "resources": [
+        "AWS Solutions Architect Associate prep",
+        "AWS Well-Architected Framework",
+        "Hands-on AWS tutorials"
+      ],
+      "practice": [
+        "Deploy app với EC2 + RDS + ALB",
+        "Setup auto-scaling based on metrics",
+        "Create Lambda function triggered by S3"
+      ],
+      "estimated_time": "10-14 days"
+    }
+  },
+
+  "Node.js": {
+    "level_0_1": {
+      "current_level": "Beginner",
+      "topics_to_learn": [
+        "Node.js runtime và npm basics",
+        "Modules: require vs import",
+        "Async patterns: callbacks, promises",
+        "File system (fs module)",
+        "Creating simple HTTP server"
+      ],
+      "resources": [
+        "Node.js official docs",
+        "NodeSchool workshops",
+        "The Net Ninja Node.js tutorials"
+      ],
+      "practice": [
+        "Build CLI tool",
+        "File processing script",
+        "Simple HTTP API"
+      ],
+      "estimated_time": "5-7 days"
+    },
+    "level_2": {
+      "current_level": "Elementary",
+      "topics_to_learn": [
+        "Express.js framework",
+        "Middleware pattern",
+        "RESTful API design",
+        "Authentication (JWT)",
+        "Error handling",
+        "Database integration (MongoDB/PostgreSQL)"
+      ],
+      "resources": [
+        "Express.js documentation",
+        "Node.js Design Patterns book",
+        "RESTful API best practices"
+      ],
+      "practice": [
+        "Build full CRUD API",
+        "Implement auth with JWT",
+        "API with database + validation"
+      ],
+      "estimated_time": "7-10 days"
+    }
+  },
+
+  "Git": {
+    "level_0_1": {
+      "current_level": "Beginner",
+      "topics_to_learn": [
+        "Basic commands: init, add, commit, push, pull",
+        "Branching basics: branch, checkout, merge",
+        "Remote repositories: clone, origin",
+        "Git status và log",
+        ".gitignore"
+      ],
+      "resources": [
+        "Git official documentation",
+        "Learn Git Branching (interactive)",
+        "GitHub guides"
+      ],
+      "practice": [
+        "Setup repo và push to GitHub",
+        "Practice branching workflow",
+        "Collaborate on shared repository"
+      ],
+      "estimated_time": "3-5 days"
+    },
+    "level_2": {
+      "current_level": "Elementary",
+      "topics_to_learn": [
+        "Merge vs rebase",
+        "Resolving merge conflicts",
+        "Git stash",
+        "Cherry-pick commits",
+        "Interactive rebase",
+        "Git hooks"
+      ],
+      "resources": [
+        "Pro Git book (free)",
+        "Advanced Git tutorials",
+        "Git workflows (Git Flow, GitHub Flow)"
+      ],
+      "practice": [
+        "Practice conflict resolution",
+        "Use rebase to clean history",
+        "Setup pre-commit hooks"
+      ],
+      "estimated_time": "5-7 days"
+    }
+  }
+}

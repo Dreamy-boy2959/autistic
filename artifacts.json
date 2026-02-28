@@ -1,0 +1,1987 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "Artifact ideas for fresh graduates. CV-worthy when completed to defined standards.",
+    "cv_ready_threshold": 65,
+    "categories": [
+      "frontend",
+      "backend",
+      "fullstack",
+      "data_ai",
+      "devops",
+      "mobile",
+      "java_backend",
+      "dotnet"
+    ]
+  },
+  "frontend": {
+    "_match_keywords": [
+      "frontend",
+      "front-end",
+      "react",
+      "vue",
+      "angular",
+      "ui developer",
+      "javascript developer",
+      "web developer"
+    ],
+    "artifacts": [
+      {
+        "id": "fe_001",
+        "title": "Personal Finance Dashboard",
+        "tagline": "Track thu/chi, visualize spending habits với charts đẹp",
+        "difficulty": "medium",
+        "estimated_days": 5,
+        "description": "Web app quản lý tài chính cá nhân. User nhập thu/chi, xem biểu đồ phân tích, set budget. Project thực tế mà recruiter thấy ngay giá trị.",
+        "why_cv_worthy": "Demonstrate data visualization, state management, CRUD, responsive UI — core frontend skills.",
+        "tech_stack": {
+          "required": [
+            "React hoặc Vue.js",
+            "Chart.js / Recharts / ApexCharts",
+            "Tailwind CSS hoặc CSS Modules"
+          ],
+          "bonus": [
+            "TypeScript",
+            "React Query / Pinia",
+            "Vitest / Jest"
+          ]
+        },
+        "core_features": [
+          "Thêm/sửa/xóa giao dịch (thu/chi) với form validation",
+          "Dashboard: Pie chart phân loại chi tiêu + Line chart trend theo tháng",
+          "Bộ lọc theo tháng, danh mục, loại giao dịch",
+          "Budget warning khi vượt ngưỡng đã đặt",
+          "Responsive hoàn toàn trên mobile & tablet"
+        ],
+        "bonus_features": [
+          "Export CSV",
+          "Dark mode",
+          "Recurring transactions",
+          "PWA offline support"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Color system nhất quán (primary, success, danger, warning)",
+            "Empty state có illustration khi chưa có data",
+            "Loading skeleton thay vì spinner trắng",
+            "Micro-animations: fade-in cards, smooth chart transitions",
+            "Mobile-first layout, touch-friendly buttons (min 44px)",
+            "Form feedback tức thì (inline error messages)"
+          ],
+          "nice_to_have": [
+            "Onboarding tooltip lần đầu dùng",
+            "Smooth number counter animation khi tổng thay đổi",
+            "Haptic-style feedback trên mobile"
+          ],
+          "design_reference": "Tham khảo: Monzo, Mint, YNAB cho inspiration"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Setup guide",
+            "Screenshots hoặc GIF demo",
+            "Tech stack + lý do chọn",
+            "Feature list",
+            "Live demo link"
+          ],
+          "code_must_have": [
+            "Tách ít nhất 5 components có reuse",
+            "Custom hook / composable",
+            "Form validation logic",
+            "Responsive CSS"
+          ],
+          "deployment": "Vercel / Netlify — phải có live link",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "fe_002",
+        "title": "Job Board UI Clone + Filter System",
+        "tagline": "Trang tìm việc với advanced filter, search và bookmark",
+        "difficulty": "medium",
+        "estimated_days": 4,
+        "description": "Clone giao diện job board (như LinkedIn Jobs / TopCV) với hệ thống filter mạnh. Dùng mock data hoặc kết nối API công khai. Rất phù hợp để show UI skills.",
+        "why_cv_worthy": "Recruiter thấy ngay bạn hiểu complex UI patterns: filter, search, pagination, card layout.",
+        "tech_stack": {
+          "required": [
+            "React hoặc Vue.js",
+            "Tailwind CSS",
+            "Axios / Fetch API"
+          ],
+          "bonus": [
+            "TypeScript",
+            "Zustand / Pinia",
+            "Framer Motion / Vue Transition"
+          ]
+        },
+        "core_features": [
+          "Search bar với debounce (không gọi API mỗi keystroke)",
+          "Multi-filter: ngành nghề, địa điểm, mức lương, loại hình (full-time/part-time/remote)",
+          "Job card list + Job detail panel (split view)",
+          "Bookmark / save jobs (lưu localStorage)",
+          "Pagination hoặc infinite scroll"
+        ],
+        "bonus_features": [
+          "Sort by: newest / relevance / salary",
+          "Applied jobs tracking",
+          "Share job link"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Filter chips hiển thị active filters, có nút xóa từng filter",
+            "Search highlight: từ khóa được highlight trong kết quả",
+            "Skeleton loading cho job cards",
+            "Empty state khi không có kết quả (với gợi ý thay đổi filter)",
+            "Sticky filter sidebar trên desktop",
+            "Bottom sheet filter trên mobile",
+            "Job card hover effect tinh tế"
+          ],
+          "nice_to_have": [
+            "Transition mượt khi switch giữa list và detail",
+            "Tag color-coded theo industry",
+            "Recently viewed jobs"
+          ],
+          "design_reference": "Tham khảo: LinkedIn Jobs, Indeed, Glassdoor"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Setup guide",
+            "Screenshots desktop + mobile",
+            "Feature list",
+            "Demo link"
+          ],
+          "code_must_have": [
+            "Debounce implementation",
+            "Filter logic tách riêng",
+            "Responsive layout"
+          ],
+          "deployment": "Vercel / Netlify",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "fe_003",
+        "title": "Collaborative Kanban Board",
+        "tagline": "Trello-like task manager với drag & drop",
+        "difficulty": "hard",
+        "estimated_days": 7,
+        "description": "Ứng dụng quản lý task theo board Kanban với drag-and-drop. Project này thường xuyên được hỏi trong interview vì đòi hỏi nhiều kỹ năng phức tạp.",
+        "why_cv_worthy": "Demonstrates advanced state management, drag-and-drop UX, complex data structures — điểm mạnh với senior-leaning roles.",
+        "tech_stack": {
+          "required": [
+            "React",
+            "dnd-kit hoặc react-beautiful-dnd",
+            "Tailwind CSS"
+          ],
+          "bonus": [
+            "TypeScript",
+            "Zustand / Redux Toolkit",
+            "Framer Motion",
+            "Supabase realtime"
+          ]
+        },
+        "core_features": [
+          "Tạo/sửa/xóa columns (To Do, In Progress, Done, Custom)",
+          "Tạo/sửa/xóa cards với title, description, due date, label",
+          "Drag & drop cards giữa các columns",
+          "Drag & drop reorder columns",
+          "Persist state (localStorage hoặc backend)"
+        ],
+        "bonus_features": [
+          "Assign member to card",
+          "Due date warning",
+          "Board background themes",
+          "Card attachments"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Smooth drag animation với visual placeholder",
+            "Card hover: subtle lift effect + shadow",
+            "Column scroll độc lập khi nhiều cards",
+            "Quick add card (click '+' → inline input, Enter để save)",
+            "Label color system (6+ màu)",
+            "Visual feedback khi drop vào column mới",
+            "Trên mobile: swipe để chuyển column"
+          ],
+          "nice_to_have": [
+            "Card cover image",
+            "Progress bar trên card nếu có checklist",
+            "Undo last action (Ctrl+Z)"
+          ],
+          "design_reference": "Tham khảo: Trello, Linear, Notion board view"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Setup",
+            "GIF demo drag-drop",
+            "Architecture explanation",
+            "Live demo"
+          ],
+          "code_must_have": [
+            "DnD logic rõ ràng",
+            "State management pattern",
+            "Optimistic updates"
+          ],
+          "deployment": "Vercel / Netlify",
+          "minimum_score_to_pass": 65
+        }
+      }
+    ]
+  },
+  "backend": {
+    "_match_keywords": [
+      "backend",
+      "back-end",
+      "python developer",
+      "node developer",
+      "nodejs",
+      "api developer",
+      "django",
+      "fastapi",
+      "flask",
+      "express"
+    ],
+    "artifacts": [
+      {
+        "id": "be_001",
+        "title": "REST API: Task Management System",
+        "tagline": "Production-grade API với auth, CRUD, docs",
+        "difficulty": "medium",
+        "estimated_days": 5,
+        "description": "RESTful API hoàn chỉnh cho hệ thống quản lý task. Có authentication, authorization, full CRUD, input validation, error handling chuẩn. Đây là artifact backend cơ bản nhất mà mọi JD đều mention.",
+        "why_cv_worthy": "Covers toàn bộ backend fundamentals: auth, CRUD, validation, error handling, API design, documentation.",
+        "tech_stack": {
+          "required": [
+            "Python (FastAPI / Django REST) hoặc Node.js (Express / NestJS)",
+            "PostgreSQL hoặc MongoDB",
+            "JWT authentication"
+          ],
+          "bonus": [
+            "Redis caching",
+            "Docker",
+            "Pytest / Jest",
+            "Swagger/OpenAPI docs"
+          ]
+        },
+        "core_features": [
+          "Auth: Register, Login, Logout, Refresh token (JWT)",
+          "Users: Profile CRUD, change password",
+          "Tasks: CRUD với title, description, status, priority, due_date, assignee",
+          "Task filter: by status, priority, due date, assignee",
+          "Pagination cho list endpoints",
+          "Input validation + meaningful error messages",
+          "API documentation (Swagger UI tự động với FastAPI, hoặc Postman collection)"
+        ],
+        "bonus_features": [
+          "Role-based access (admin/member)",
+          "Task comments",
+          "File attachment",
+          "Email notification"
+        ],
+        "ui_ux_requirements": {
+          "note": "Backend project — UX ở đây là Developer Experience (DX)",
+          "must_have": [
+            "API response format nhất quán: {success, data, message, errors}",
+            "HTTP status codes đúng (200/201/400/401/403/404/422/500)",
+            "Error messages rõ ràng, developer-friendly (không expose stack trace production)",
+            "Swagger UI / ReDoc accessible tại /docs",
+            "README có ví dụ curl / Postman cho mỗi endpoint",
+            "Postman Collection hoặc .http file trong repo",
+            "Health check endpoint GET /health"
+          ],
+          "nice_to_have": [
+            "Rate limiting với clear headers (X-RateLimit-Remaining)",
+            "Request ID trong response headers để debug",
+            "Versioned API (/api/v1/...)"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Setup + env variables",
+            "API endpoint list",
+            "Auth flow explanation",
+            "Postman collection hoặc curl examples"
+          ],
+          "code_must_have": [
+            "Middleware cho auth",
+            "Validation layer tách biệt",
+            "Error handler global",
+            "Database migrations"
+          ],
+          "deployment": "Railway / Render / Fly.io — phải có live URL",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "be_002",
+        "title": "URL Shortener Service",
+        "tagline": "Bit.ly clone với analytics, custom slug, QR code",
+        "difficulty": "easy",
+        "estimated_days": 3,
+        "description": "Service rút gọn URL với tracking click. Project nhỏ nhưng đòi hỏi database design tốt, caching, và redirect performance — perfect để demonstrate backend thinking.",
+        "why_cv_worthy": "Simple domain nhưng shows: caching strategy, database indexing, redirect optimization, analytics — backend depth.",
+        "tech_stack": {
+          "required": [
+            "Node.js (Express) hoặc Python (FastAPI)",
+            "PostgreSQL hoặc MongoDB",
+            "Redis (for caching)"
+          ],
+          "bonus": [
+            "Docker",
+            "nanoid / shortid",
+            "QRCode library"
+          ]
+        },
+        "core_features": [
+          "POST /shorten: tạo short URL (random hoặc custom slug)",
+          "GET /:slug: redirect với 301/302, track click",
+          "Analytics: total clicks, clicks by day, top referrers, browser/OS breakdown",
+          "Link expiration (optional expire date)",
+          "Link management: list, edit, delete",
+          "Redis cache cho popular links"
+        ],
+        "bonus_features": [
+          "QR code generation",
+          "Password-protected links",
+          "UTM parameter tracking",
+          "API key auth"
+        ],
+        "ui_ux_requirements": {
+          "note": "Nên có minimal frontend để demo",
+          "must_have": [
+            "Simple landing page: 1 input + button để shorten",
+            "Kết quả hiện rõ short URL + copy button",
+            "Analytics page dạng bảng/chart đơn giản",
+            "API response nhất quán với proper HTTP codes",
+            "README có architecture diagram (dù đơn giản)"
+          ],
+          "nice_to_have": [
+            "Click count badge realtime",
+            "Link preview (OG tags)",
+            "Mini dashboard với chart"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Architecture diagram",
+            "Setup guide",
+            "API docs",
+            "Caching strategy explanation"
+          ],
+          "code_must_have": [
+            "Redis caching implemented",
+            "Click tracking",
+            "Proper redirects"
+          ],
+          "deployment": "Railway / Render",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "be_003",
+        "title": "Real-time Chat API",
+        "tagline": "WebSocket chat với rooms, history, online status",
+        "difficulty": "hard",
+        "estimated_days": 7,
+        "description": "Chat backend với WebSocket support. Rooms, message history, online/offline status, typing indicators. Demonstrates real-time systems — highly valued skill.",
+        "why_cv_worthy": "WebSocket + real-time là differentiator. Shows systems thinking, concurrency awareness, scalability consideration.",
+        "tech_stack": {
+          "required": [
+            "Node.js (Socket.io) hoặc Python (FastAPI + WebSocket)",
+            "PostgreSQL",
+            "Redis (pub/sub)"
+          ],
+          "bonus": [
+            "JWT auth",
+            "Docker",
+            "Jest / Pytest"
+          ]
+        },
+        "core_features": [
+          "Auth: register/login với JWT",
+          "Rooms: create, join, leave, list rooms",
+          "Messaging: send/receive real-time, message history với pagination",
+          "Online status: hiển thị ai đang online",
+          "Typing indicator",
+          "Message read receipt"
+        ],
+        "bonus_features": [
+          "Direct messages (DM)",
+          "File sharing",
+          "Message reactions",
+          "Push notifications"
+        ],
+        "ui_ux_requirements": {
+          "note": "Minimal demo client cần thiết để showcase",
+          "must_have": [
+            "Simple HTML/JS client để demo real-time (không cần đẹp, cần functional)",
+            "Connection state indicator (connected/disconnected/reconnecting)",
+            "Message timestamps",
+            "Clear separation giữa system messages vs user messages",
+            "README có sequence diagram cho WebSocket flow"
+          ],
+          "nice_to_have": [
+            "Auto-reconnect với exponential backoff",
+            "Message delivery status (sent/delivered/read)"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "WebSocket event list",
+            "Setup guide",
+            "Architecture diagram",
+            "How to test"
+          ],
+          "code_must_have": [
+            "WebSocket handler tách biệt",
+            "Redis pub/sub",
+            "Message persistence",
+            "Error handling"
+          ],
+          "deployment": "Railway / Fly.io",
+          "minimum_score_to_pass": 65
+        }
+      }
+    ]
+  },
+  "fullstack": {
+    "_match_keywords": [
+      "fullstack",
+      "full-stack",
+      "full stack",
+      "web developer",
+      "software engineer"
+    ],
+    "artifacts": [
+      {
+        "id": "fs_001",
+        "title": "E-learning Platform (Mini Udemy)",
+        "tagline": "Upload course, enroll, watch video, track progress",
+        "difficulty": "hard",
+        "estimated_days": 10,
+        "description": "Platform học online mini với role instructor và student. Instructor upload bài học, student đăng ký, xem video, track tiến độ. Ambitious nhưng rất ấn tượng với recruiter.",
+        "why_cv_worthy": "Covers full stack depth: file upload, video streaming, role-based auth, complex data model, payment flow (optional).",
+        "tech_stack": {
+          "required": [
+            "React / Next.js (frontend)",
+            "Node.js / Python (backend)",
+            "PostgreSQL",
+            "Cloudinary / S3 (media)"
+          ],
+          "bonus": [
+            "TypeScript",
+            "Stripe (payment)",
+            "Redis",
+            "Docker"
+          ]
+        },
+        "core_features": [
+          "Auth với 2 roles: Instructor và Student",
+          "Instructor: tạo course, upload video lessons, set price",
+          "Student: browse courses, enroll (free/paid), watch video",
+          "Progress tracking: % completion per course",
+          "Course review & rating",
+          "Search + filter courses"
+        ],
+        "bonus_features": [
+          "Payment với Stripe",
+          "Certificate on completion",
+          "Quiz per lesson",
+          "Discussion comments"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Phân biệt rõ 2 dashboard: Instructor vs Student",
+            "Video player tùy chỉnh với progress bar và resume from last position",
+            "Course card với thumbnail, rating, price, enrollment count",
+            "Progress indicator per course (% completion visual)",
+            "Breadcrumb navigation trong course content",
+            "Mobile responsive — student thường học trên điện thoại",
+            "Loading state cho video buffering"
+          ],
+          "nice_to_have": [
+            "Playback speed control (0.75x, 1x, 1.25x, 1.5x, 2x)",
+            "Note-taking panel bên cạnh video",
+            "Certificate PDF download"
+          ],
+          "design_reference": "Tham khảo: Udemy, Coursera, edX"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Architecture diagram",
+            "Setup guide",
+            "Demo credentials (2 roles)",
+            "Screenshots",
+            "Live demo"
+          ],
+          "code_must_have": [
+            "Role-based middleware",
+            "File upload handling",
+            "Database schema diagram",
+            "API documentation"
+          ],
+          "deployment": "Vercel (frontend) + Railway (backend)",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "fs_002",
+        "title": "Community Forum (Reddit-like)",
+        "tagline": "Post, comment, upvote, subreddit-style communities",
+        "difficulty": "medium",
+        "estimated_days": 7,
+        "description": "Forum cộng đồng với posts, nested comments, voting, communities. Classic project nhưng hiệu quả vì đòi hỏi nhiều kỹ năng: nested data, real-time updates, vote system.",
+        "why_cv_worthy": "Nested comments, voting algorithm, community moderation — shows ability to handle complex data relationships.",
+        "tech_stack": {
+          "required": [
+            "Next.js hoặc React + Express",
+            "PostgreSQL",
+            "Prisma / Sequelize"
+          ],
+          "bonus": [
+            "TypeScript",
+            "Tailwind",
+            "NextAuth",
+            "Redis (vote caching)"
+          ]
+        },
+        "core_features": [
+          "Auth: register/login (email hoặc OAuth Google)",
+          "Communities: tạo, join, leave, moderate",
+          "Posts: tạo (text/link/image), edit, delete",
+          "Comments: nested (2-3 levels), edit, delete",
+          "Voting: upvote/downvote posts và comments",
+          "Feed: home feed (subscribed), trending, new",
+          "Search posts và communities"
+        ],
+        "bonus_features": [
+          "Post flair/tags",
+          "User karma system",
+          "Moderator tools (ban, remove post)",
+          "RSS feed"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Vote buttons: animated số thay đổi khi click",
+            "Nested comments có visual indentation + collapse/expand",
+            "Post preview trong feed (truncated, expand on click)",
+            "Community sidebar với rules và moderators",
+            "Relative timestamps (2 hours ago, 3 days ago)",
+            "Share button với copy link",
+            "Infinite scroll cho feeds"
+          ],
+          "nice_to_have": [
+            "Markdown editor cho post content",
+            "Image upload với preview",
+            "Dark/light mode toggle"
+          ],
+          "design_reference": "Tham khảo: Reddit, Lemmy, Hacker News"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Setup",
+            "Screenshots",
+            "Database schema",
+            "Live demo"
+          ],
+          "code_must_have": [
+            "Nested comment query",
+            "Vote debounce",
+            "Auth middleware",
+            "Pagination"
+          ],
+          "deployment": "Vercel / Railway",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "fs_003",
+        "title": "AI-Powered Expense Splitter",
+        "tagline": "Trip expense splitting với AI receipt scan",
+        "difficulty": "medium",
+        "estimated_days": 6,
+        "description": "App chia tiền nhóm (như Splitwise) với tính năng scan hóa đơn bằng AI. Rất practical, demonstrates AI integration + complex calculation logic.",
+        "why_cv_worthy": "AI integration + financial logic + real-time group sync = ấn tượng với modern tech stack companies.",
+        "tech_stack": {
+          "required": [
+            "React / Next.js",
+            "Node.js / Python backend",
+            "PostgreSQL"
+          ],
+          "bonus": [
+            "OpenAI Vision API / Google Vision",
+            "TypeScript",
+            "Socket.io (realtime)"
+          ]
+        },
+        "core_features": [
+          "Tạo group trip, invite members",
+          "Thêm expense: amount, payer, split among whom",
+          "AI scan receipt: upload ảnh hóa đơn → tự extract amount + items",
+          "Settlement: tính toán ai nợ ai bao nhiêu (optimize transactions)",
+          "Balance overview per member",
+          "Expense history với filter"
+        ],
+        "bonus_features": [
+          "Payment request via link",
+          "Multi-currency",
+          "Recurring expenses",
+          "Export PDF"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Expense form: chọn payer + checkbox ai được split dễ dàng",
+            "Balance card: xanh (được nhận) / đỏ (còn nợ) rõ ràng",
+            "Settlement flow: step-by-step 'Pay X → Y: amount'",
+            "Receipt scan: upload area với drag-drop + preview",
+            "AI scan result editable trước khi confirm",
+            "Group activity feed theo chronological order",
+            "Offline-friendly: queue expenses khi mất mạng"
+          ],
+          "nice_to_have": [
+            "Swipe to mark expense as settled",
+            "Emoji reactions trên expenses",
+            "Share settle link qua Zalo/Messenger"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Setup",
+            "AI integration explanation",
+            "Screenshots",
+            "Demo video/GIF"
+          ],
+          "code_must_have": [
+            "Settlement algorithm",
+            "AI receipt parsing",
+            "Auth + group permissions"
+          ],
+          "deployment": "Vercel + Railway",
+          "minimum_score_to_pass": 65
+        }
+      }
+    ]
+  },
+  "data_ai": {
+    "_match_keywords": [
+      "data",
+      "machine learning",
+      "ml",
+      "ai",
+      "data science",
+      "data engineer",
+      "data analyst",
+      "python",
+      "nlp",
+      "deep learning"
+    ],
+    "artifacts": [
+      {
+        "id": "da_001",
+        "title": "Job Market Analytics Dashboard",
+        "tagline": "Crawl & visualize Vietnam IT job market trends",
+        "difficulty": "medium",
+        "estimated_days": 6,
+        "description": "Crawl dữ liệu IT jobs từ VietnamWorks / TopCV, phân tích trends (top skills, salary ranges, location heatmap), hiển thị dashboard. Rất relevant với ngành và shows end-to-end data pipeline.",
+        "why_cv_worthy": "End-to-end: data collection → processing → analysis → visualization. Recruiter thấy bạn biết toàn bộ data workflow.",
+        "tech_stack": {
+          "required": [
+            "Python",
+            "Pandas / Polars",
+            "Matplotlib / Plotly / Streamlit"
+          ],
+          "bonus": [
+            "Scrapy / BeautifulSoup",
+            "PostgreSQL / SQLite",
+            "Jupyter Notebook",
+            "Scikit-learn (clustering)"
+          ]
+        },
+        "core_features": [
+          "Data collection: crawl hoặc dùng public API (VietnamWorks API)",
+          "Data cleaning: xử lý missing values, normalize salary ranges, deduplicate",
+          "Analysis: top skills by job count, salary distribution, remote vs onsite, experience requirements",
+          "Visualizations: bar chart, box plot, heatmap, word cloud skills",
+          "Interactive dashboard (Streamlit hoặc Dash)",
+          "Export findings as report"
+        ],
+        "bonus_features": [
+          "Skill correlation analysis",
+          "Salary prediction model",
+          "Time series: job postings trend",
+          "Location map"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Dashboard layout rõ ràng: KPI cards ở trên, charts ở dưới",
+            "Color palette nhất quán (không dùng mặc định matplotlib xấu)",
+            "Chart titles và axis labels đầy đủ, readable",
+            "Filter sidebar: chọn city, experience level, job type",
+            "Insights text: 2-3 dòng kết luận dưới mỗi chart",
+            "Data freshness indicator (last updated: ...)",
+            "Loading spinner khi re-filter data"
+          ],
+          "nice_to_have": [
+            "Hover tooltips chi tiết trên charts",
+            "Download chart as PNG",
+            "Comparison: skill demand YoY"
+          ],
+          "design_reference": "Tham khảo: Streamlit Gallery, Tableau Public"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Data source explanation",
+            "Methodology",
+            "Screenshots",
+            "Key findings summary",
+            "How to run"
+          ],
+          "code_must_have": [
+            "Data cleaning pipeline",
+            "Modular code (không phải 1 notebook)",
+            "Comments trên analysis logic"
+          ],
+          "deployment": "Streamlit Cloud (free) — phải có live link",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "da_002",
+        "title": "NLP Sentiment Analyzer cho Review",
+        "tagline": "Phân tích cảm xúc review sản phẩm/phim tiếng Việt",
+        "difficulty": "hard",
+        "estimated_days": 7,
+        "description": "Train model phân tích sentiment (positive/negative/neutral) cho reviews tiếng Việt. Dataset có thể scrape từ Shopee/Tiki reviews hoặc dùng public dataset. Wrap thành API + web demo.",
+        "why_cv_worthy": "NLP + Vietnamese text = rare skill. Shows: data preprocessing, model training, API deployment — full ML pipeline.",
+        "tech_stack": {
+          "required": [
+            "Python",
+            "scikit-learn hoặc HuggingFace Transformers",
+            "FastAPI (serving)"
+          ],
+          "bonus": [
+            "PhoBERT (Vietnamese BERT)",
+            "Pandas",
+            "Streamlit / React frontend",
+            "Docker"
+          ]
+        },
+        "core_features": [
+          "Dataset: thu thập hoặc dùng VLSP/UIT-VSFC Vietnamese sentiment dataset",
+          "Preprocessing: tokenize tiếng Việt (underthesea / pyvi), remove stopwords",
+          "Train baseline: TF-IDF + Logistic Regression (accuracy benchmark)",
+          "Train advanced: fine-tune PhoBERT hoặc multilingual BERT",
+          "Model evaluation: confusion matrix, F1 score, classification report",
+          "REST API: POST /analyze → {text, sentiment, confidence}",
+          "Web demo: input text → hiện kết quả với confidence bar"
+        ],
+        "bonus_features": [
+          "Batch analysis (upload CSV)",
+          "Aspect-based sentiment (phân tích từng aspect)",
+          "Word cloud by sentiment"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Demo UI clean: large textarea + Analyze button + result card",
+            "Confidence bar: visual % cho positive/negative/neutral",
+            "Màu sắc trực quan: xanh = positive, đỏ = negative, xám = neutral",
+            "Model info card: tên model, accuracy trên test set, dataset size",
+            "Example inputs để user thử nhanh",
+            "API docs tự động (FastAPI Swagger)",
+            "Error message rõ nếu text quá ngắn/dài"
+          ],
+          "nice_to_have": [
+            "Word highlighting: từ nào contribute nhiều nhất",
+            "Batch upload CSV với download results",
+            "History của các text đã analyze"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Dataset description",
+            "Model architecture",
+            "Performance metrics",
+            "Setup guide",
+            "API docs"
+          ],
+          "code_must_have": [
+            "Training notebook",
+            "Evaluation metrics code",
+            "Clean inference pipeline",
+            "Model saved/loaded properly"
+          ],
+          "deployment": "Hugging Face Spaces hoặc Railway",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "da_003",
+        "title": "Recommendation System",
+        "tagline": "Content-based + collaborative filtering recommender",
+        "difficulty": "hard",
+        "estimated_days": 8,
+        "description": "Xây dựng recommendation system cho movies (MovieLens dataset) hoặc products. Implement cả content-based và collaborative filtering, so sánh kết quả, wrap thành demo app.",
+        "why_cv_worthy": "Recommendation systems là core ML product tại mọi tech company. Implement được = immediately valuable hire.",
+        "tech_stack": {
+          "required": [
+            "Python",
+            "Pandas / NumPy",
+            "Scikit-learn / Surprise library"
+          ],
+          "bonus": [
+            "FastAPI",
+            "Streamlit",
+            "LightFM / implicit",
+            "PostgreSQL"
+          ]
+        },
+        "core_features": [
+          "Content-based filtering: TF-IDF on descriptions + cosine similarity",
+          "Collaborative filtering: user-item matrix + SVD / ALS",
+          "Hybrid approach: combine both methods",
+          "Evaluation: RMSE, precision@k, recall@k, NDCG",
+          "Cold-start handling: popular items cho new users",
+          "Web demo: input user ID hoặc item → show top-10 recommendations"
+        ],
+        "bonus_features": [
+          "A/B testing simulation",
+          "Diversity metrics",
+          "Explanation: 'vì bạn đã thích X'"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Demo page: search/select item → instant recommendations grid",
+            "Each recommendation card: thumbnail, title, similarity score, tags",
+            "Filter: chọn algorithm (content-based vs collaborative vs hybrid)",
+            "Metrics dashboard: hiện RMSE và precision@k cho từng model",
+            "Explanation text: tại sao item này được recommend",
+            "Loading state khi compute recommendations"
+          ],
+          "nice_to_have": [
+            "Interactive: thumbs up/down → retrain/update recommendations",
+            "Similarity heatmap visualization"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Algorithm explanation",
+            "Dataset",
+            "Evaluation results comparison",
+            "Demo link"
+          ],
+          "code_must_have": [
+            "Both algorithms implemented",
+            "Proper train/test split",
+            "Evaluation metrics",
+            "Clean API"
+          ],
+          "deployment": "Streamlit Cloud / HuggingFace Spaces",
+          "minimum_score_to_pass": 65
+        }
+      }
+    ]
+  },
+  "devops": {
+    "_match_keywords": [
+      "devops",
+      "cloud",
+      "aws",
+      "gcp",
+      "azure",
+      "kubernetes",
+      "docker",
+      "infrastructure",
+      "sre",
+      "platform engineer",
+      "ci/cd"
+    ],
+    "artifacts": [
+      {
+        "id": "do_001",
+        "title": "Microservices App với Docker + CI/CD",
+        "tagline": "2-3 services, Docker Compose, GitHub Actions pipeline",
+        "difficulty": "hard",
+        "estimated_days": 7,
+        "description": "Xây dựng app nhỏ với microservices architecture: auth service, main service, maybe notification service. Dockerize toàn bộ, setup CI/CD với GitHub Actions, deploy lên cloud.",
+        "why_cv_worthy": "Demonstrate toàn bộ DevOps lifecycle: containerization, orchestration, CI/CD, monitoring. Exactly what DevOps JDs require.",
+        "tech_stack": {
+          "required": [
+            "Docker + Docker Compose",
+            "GitHub Actions",
+            "Nginx (reverse proxy)"
+          ],
+          "bonus": [
+            "Kubernetes (minikube)",
+            "Terraform",
+            "Prometheus + Grafana",
+            "AWS / GCP free tier"
+          ]
+        },
+        "core_features": [
+          "2-3 microservices (vd: auth-service, api-service, notification-service)",
+          "Docker Compose cho local development",
+          "Nginx reverse proxy + load balancing config",
+          "GitHub Actions: test → build image → push to registry → deploy",
+          "Environment-based configs (dev/staging/prod)",
+          "Health check endpoints + readiness/liveness probes",
+          "Centralized logging (ít nhất log aggregation)"
+        ],
+        "bonus_features": [
+          "Kubernetes deployment manifests",
+          "Terraform IaC",
+          "Prometheus metrics",
+          "Grafana dashboard"
+        ],
+        "ui_ux_requirements": {
+          "note": "DevOps project — DX và Ops Experience là priority",
+          "must_have": [
+            "README có architecture diagram (services + connections)",
+            "CI/CD pipeline diagram hoặc screenshot GitHub Actions",
+            "Makefile hoặc scripts để common commands (make up, make test, make deploy)",
+            "Clear .env.example với tất cả required variables",
+            "Health dashboard URL trong README",
+            "Runbook: troubleshooting guide cơ bản"
+          ],
+          "nice_to_have": [
+            "Grafana dashboard screenshot",
+            "Load test results",
+            "Cost estimate cho AWS/GCP deployment"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Architecture diagram",
+            "CI/CD pipeline explanation",
+            "How to run locally + deploy",
+            "Monitoring setup"
+          ],
+          "code_must_have": [
+            "Working Docker Compose",
+            "CI/CD YAML",
+            "Nginx config",
+            "Health checks"
+          ],
+          "deployment": "AWS EC2 free tier / GCP / Railway",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "do_002",
+        "title": "Infrastructure as Code với Terraform",
+        "tagline": "Provision cloud infra tự động: VPC, EC2, RDS, S3",
+        "difficulty": "hard",
+        "estimated_days": 6,
+        "description": "Dùng Terraform để provision toàn bộ infrastructure cho một web app trên AWS hoặc GCP. Document đầy đủ, modular, reusable. Rare skill cho fresh grad — rất ấn tượng.",
+        "why_cv_worthy": "IaC là must-have skill hiện tại. Fresh grad biết Terraform = instant differentiator trong DevOps/Cloud roles.",
+        "tech_stack": {
+          "required": [
+            "Terraform",
+            "AWS hoặc GCP (free tier)"
+          ],
+          "bonus": [
+            "GitHub Actions (apply on merge)",
+            "Terragrunt",
+            "AWS CloudWatch",
+            "tfsec (security scan)"
+          ]
+        },
+        "core_features": [
+          "VPC với public/private subnets, security groups",
+          "EC2 instance với auto-scaling group",
+          "RDS PostgreSQL (hoặc Cloud SQL) trong private subnet",
+          "S3 bucket với proper policies",
+          "Load Balancer (ALB hoặc NLB)",
+          "Modular structure: modules/vpc, modules/ec2, modules/rds",
+          "Remote state backend (S3 + DynamoDB lock)",
+          "Variables và outputs properly defined"
+        ],
+        "bonus_features": [
+          "Multi-environment (dev/staging/prod)",
+          "Cost estimation với infracost",
+          "Drift detection",
+          "CloudWatch alerts"
+        ],
+        "ui_ux_requirements": {
+          "note": "IaC project — documentation IS the UX",
+          "must_have": [
+            "Architecture diagram (AWS / GCP resource map)",
+            "README: prerequisites, setup steps, destroy instructions",
+            "Variable descriptions trong variables.tf (không blank description)",
+            "terraform plan output screenshot trong README",
+            "Cost estimate hoặc disclaimer về free tier",
+            "Clear module structure diagram",
+            "IMPORTANT: .gitignore đúng (không commit .tfstate, credentials)"
+          ],
+          "nice_to_have": [
+            "GitHub Actions để validate terraform on PR",
+            "Pre-commit hooks cho terraform fmt + validate",
+            "infracost report"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Architecture diagram",
+            "Module structure",
+            "Cost estimate",
+            "Apply/destroy instructions"
+          ],
+          "code_must_have": [
+            "Modular Terraform",
+            "Remote state",
+            "Security groups properly restricted",
+            "No hardcoded credentials"
+          ],
+          "deployment": "AWS / GCP (screenshot evidence is fine)",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "do_003",
+        "title": "Monitoring Stack: App + Infrastructure",
+        "tagline": "Prometheus + Grafana + AlertManager cho real app",
+        "difficulty": "medium",
+        "estimated_days": 5,
+        "description": "Setup observability stack hoàn chỉnh cho một web application: metrics với Prometheus, dashboards với Grafana, alerting với AlertManager. Deploy toàn bộ bằng Docker Compose.",
+        "why_cv_worthy": "Monitoring/observability là gap lớn với fresh grads. Biết Prometheus + Grafana = strong signal cho SRE/DevOps roles.",
+        "tech_stack": {
+          "required": [
+            "Prometheus",
+            "Grafana",
+            "Docker Compose"
+          ],
+          "bonus": [
+            "AlertManager",
+            "Node Exporter",
+            "Loki (log aggregation)",
+            "cAdvisor (container metrics)"
+          ]
+        },
+        "core_features": [
+          "Sample app với custom metrics exposed (/metrics endpoint)",
+          "Prometheus scrape config cho app + node exporter",
+          "Grafana dashboards: app metrics + system metrics",
+          "AlertManager: cấu hình ít nhất 2 alerts (high CPU, high error rate)",
+          "Alert notification (email hoặc Slack webhook)",
+          "Docker Compose bring up toàn bộ stack với 1 command",
+          "Grafana provisioning tự động (datasource + dashboards as code)"
+        ],
+        "bonus_features": [
+          "Loki + Promtail log aggregation",
+          "Jaeger distributed tracing",
+          "SLO/SLA dashboard"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Grafana dashboards đẹp, meaningful: không chỉ copy default",
+            "Dashboard README: giải thích ý nghĩa của mỗi panel",
+            "Alert rules có runbook_url pointing đến troubleshooting doc",
+            "Screenshot Grafana dashboards trong README",
+            "README: 'what each service does' diagram",
+            "Demo: trigger alert intentionally và screenshot"
+          ],
+          "nice_to_have": [
+            "Grafana dashboard JSON exported vào repo",
+            "Synthetic monitoring (uptime check)",
+            "SLO dashboard với error budget"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Architecture diagram",
+            "Dashboard screenshots",
+            "Alert examples",
+            "Setup guide"
+          ],
+          "code_must_have": [
+            "Custom app metrics",
+            "Alert rules",
+            "Grafana provisioning config",
+            "Working Docker Compose"
+          ],
+          "deployment": "Docker Compose local là OK, screenshot evidence required",
+          "minimum_score_to_pass": 65
+        }
+      }
+    ]
+  },
+  "mobile": {
+    "_match_keywords": [
+      "mobile",
+      "react native",
+      "flutter",
+      "ios",
+      "android",
+      "kotlin",
+      "swift",
+      "mobile developer"
+    ],
+    "artifacts": [
+      {
+        "id": "mob_001",
+        "title": "Habit Tracker App",
+        "tagline": "Track daily habits với streak, reminder, statistics",
+        "difficulty": "medium",
+        "estimated_days": 6,
+        "description": "App theo dõi thói quen hàng ngày. Tạo habits, check-in hàng ngày, xem streak, reminder notification, statistics. Classic mobile app với rich UX opportunities.",
+        "why_cv_worthy": "Covers mobile fundamentals: local notifications, local storage, animations, charts — everything in one app.",
+        "tech_stack": {
+          "required": [
+            "Flutter hoặc React Native",
+            "SQLite / AsyncStorage / Hive"
+          ],
+          "bonus": [
+            "Local notifications",
+            "Riverpod / Zustand / Provider",
+            "fl_chart / Victory Native"
+          ]
+        },
+        "core_features": [
+          "Tạo/sửa/xóa habits với icon, màu, frequency (daily/weekly)",
+          "Check-in: tap để mark done hôm nay",
+          "Streak tracking: current streak + longest streak",
+          "Daily reminder notification (custom time per habit)",
+          "Statistics: completion rate, calendar heatmap, weekly/monthly chart",
+          "Habit categories (Health, Work, Personal)"
+        ],
+        "bonus_features": [
+          "Widgets (home screen widget)",
+          "Share streak image",
+          "Habit templates library",
+          "Dark mode"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Home screen: today's habits list, progress ring tổng quát",
+            "Check-in animation: satisfying tick + confetti nhỏ",
+            "Streak badge nổi bật với fire emoji khi streak dài",
+            "Calendar heatmap (GitHub-style) cho completion history",
+            "Swipe to delete với undo toast",
+            "Habit form: color picker + icon picker đẹp",
+            "Empty state: illustration + CTA khi chưa có habit nào",
+            "Smooth page transitions"
+          ],
+          "nice_to_have": [
+            "Haptic feedback khi check-in",
+            "Progress sounds (optional, with toggle)",
+            "Motivational quote daily"
+          ],
+          "design_reference": "Tham khảo: Streaks (iOS), Habitica, Loop Habit Tracker"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Screenshots (3-5 screens)",
+            "APK download link hoặc TestFlight",
+            "Setup guide",
+            "Feature list"
+          ],
+          "code_must_have": [
+            "State management pattern",
+            "Local notifications",
+            "Persistent storage",
+            "At least 1 animation"
+          ],
+          "deployment": "APK trên GitHub Releases hoặc Expo Go link",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "mob_002",
+        "title": "Food Delivery App UI + Ordering Flow",
+        "tagline": "Browse menu, cart, checkout, order tracking",
+        "difficulty": "medium",
+        "estimated_days": 5,
+        "description": "Clone food delivery app UI (như Grab Food / Baemin) với full ordering flow. Focus vào UI quality và smooth animations. Backend có thể là mock data.",
+        "why_cv_worthy": "Complex UI patterns: scroll behaviors, cart state, multi-step flow, maps. Shows UI maturity.",
+        "tech_stack": {
+          "required": [
+            "Flutter hoặc React Native",
+            "Provider / Riverpod / Zustand"
+          ],
+          "bonus": [
+            "Google Maps SDK",
+            "Lottie animations",
+            "Stripe / mock payment"
+          ]
+        },
+        "core_features": [
+          "Home: banner carousel, restaurant list, categories",
+          "Restaurant detail: menu sections, item cards",
+          "Item detail: customize (size, toppings), add to cart",
+          "Cart: list items, quantity +/-, total, apply coupon",
+          "Checkout: address, payment method, order summary",
+          "Order tracking: status timeline (placed/confirmed/preparing/delivering/delivered)"
+        ],
+        "bonus_features": [
+          "Map với delivery route",
+          "Review system",
+          "Favorite restaurants",
+          "Order history"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Bottom sheet cho item customization (không navigate sang trang mới)",
+            "Cart badge trên app bar (animated khi add item)",
+            "Add to cart button animation",
+            "Sticky header khi scroll restaurant menu",
+            "Price breakdown rõ ràng ở checkout",
+            "Order status animation (progress bar + icons)",
+            "Pull to refresh trên home",
+            "Shimmer loading cho restaurant cards"
+          ],
+          "nice_to_have": [
+            "Swipe up từ bottom để xem full cart",
+            "Confetti animation khi đặt hàng thành công",
+            "Real-time driver location trên map"
+          ],
+          "design_reference": "Tham khảo: Grab, Baemin, Shopee Food"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Video/GIF demo full flow",
+            "Screenshots",
+            "Setup guide"
+          ],
+          "code_must_have": [
+            "Cart state management",
+            "Multi-step checkout",
+            "At least 3 animations"
+          ],
+          "deployment": "APK / Expo Go",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "mob_003",
+        "title": "Language Learning App (Mini Duolingo)",
+        "tagline": "Flashcards, quizzes, streak, spaced repetition",
+        "difficulty": "hard",
+        "estimated_days": 8,
+        "description": "App học ngôn ngữ với flashcards, quiz nhiều dạng, spaced repetition algorithm, streak system. Ambitious mobile project shows gamification + algorithm skills.",
+        "why_cv_worthy": "Spaced repetition algorithm + gamification + rich animations = technical + product thinking in one project.",
+        "tech_stack": {
+          "required": [
+            "Flutter hoặc React Native",
+            "SQLite / Hive (local)",
+            "Provider / Riverpod"
+          ],
+          "bonus": [
+            "Text-to-Speech API",
+            "Lottie",
+            "local notifications"
+          ]
+        },
+        "core_features": [
+          "Word decks: create, import, browse",
+          "Flashcard review với SM-2 spaced repetition algorithm",
+          "Quiz modes: multiple choice, fill-in-the-blank, listening",
+          "Streak + XP system",
+          "Progress: words learned, accuracy rate, study time",
+          "Daily reminder notification"
+        ],
+        "bonus_features": [
+          "Text-to-speech pronunciation",
+          "Import from CSV/Anki",
+          "Leaderboard",
+          "Offline-first"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Card flip animation cho flashcard review",
+            "Quiz answer feedback: green flash (correct) / red shake (wrong)",
+            "XP earned animation sau mỗi session",
+            "Streak flame counter prominent trên home",
+            "Progress ring hoặc bar cho daily goal",
+            "Lesson complete screen với confetti",
+            "Swipe gestures: swipe right (know) / left (don't know) cho flashcards",
+            "Sound effects toggle"
+          ],
+          "nice_to_have": [
+            "Mascot character với reactions",
+            "Level-up animation",
+            "League/weekly challenge"
+          ],
+          "design_reference": "Tham khảo: Duolingo, Anki, Memrise"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "SM-2 algorithm explanation",
+            "Screenshots",
+            "APK / Expo link",
+            "Feature list"
+          ],
+          "code_must_have": [
+            "SM-2 implementation với tests",
+            "Offline storage",
+            "Gamification logic",
+            "Animations"
+          ],
+          "deployment": "APK / Expo Go",
+          "minimum_score_to_pass": 65
+        }
+      }
+    ]
+  },
+  "java_backend": {
+    "_match_keywords": [
+      "java",
+      "spring",
+      "spring boot",
+      "java developer",
+      "backend java",
+      "j2ee"
+    ],
+    "artifacts": [
+      {
+        "id": "jv_001",
+        "title": "E-Commerce REST API với Spring Boot",
+        "tagline": "Full e-commerce backend: products, orders, payment, auth",
+        "difficulty": "hard",
+        "estimated_days": 8,
+        "description": "Production-ready e-commerce backend với Spring Boot. Covers toàn bộ domain: products, categories, cart, orders, payment mock, auth. Chuẩn architecture với layers rõ ràng.",
+        "why_cv_worthy": "Spring Boot e-commerce = covers 90% of what Java backend JDs ask for. Domain-driven design skills.",
+        "tech_stack": {
+          "required": [
+            "Spring Boot 3.x",
+            "PostgreSQL",
+            "Spring Security + JWT"
+          ],
+          "bonus": [
+            "Redis (caching)",
+            "Docker",
+            "JUnit 5 + Mockito",
+            "Swagger/OpenAPI",
+            "Flyway migrations"
+          ]
+        },
+        "core_features": [
+          "Auth: register/login/refresh với JWT + role (USER/ADMIN)",
+          "Products: CRUD, categories, images, search + filter + pagination",
+          "Cart: add/remove/update quantity, price calculation",
+          "Orders: place order, order history, status management (PENDING/CONFIRMED/SHIPPED/DELIVERED)",
+          "Payment mock: create payment intent, webhook handler",
+          "Admin: manage products, view all orders, update status",
+          "Exception handling global với proper HTTP codes"
+        ],
+        "bonus_features": [
+          "Elasticsearch product search",
+          "Email notifications",
+          "Rate limiting",
+          "Actuator + monitoring"
+        ],
+        "ui_ux_requirements": {
+          "note": "Backend — DX là priority",
+          "must_have": [
+            "Swagger UI đầy đủ với examples cho mỗi endpoint",
+            "Postman Collection trong repo",
+            "Response format nhất quán: ApiResponse<T> wrapper",
+            "Meaningful error messages với error codes",
+            "README: domain model diagram (ERD)",
+            "README: API endpoint summary table",
+            "Pagination response với metadata (total, page, size)"
+          ],
+          "nice_to_have": [
+            "Request/Response logging với correlation ID",
+            "Actuator health/info endpoints",
+            "Docker Compose với database + app"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "ERD diagram",
+            "API docs link",
+            "Setup guide",
+            "Architecture layers explanation"
+          ],
+          "code_must_have": [
+            "Layered architecture (Controller/Service/Repository)",
+            "Exception handling",
+            "Input validation",
+            "At least 10 unit tests"
+          ],
+          "deployment": "Railway / Fly.io",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "jv_002",
+        "title": "Library Management System",
+        "tagline": "Quản lý sách, mượn/trả, phạt trễ hạn, báo cáo",
+        "difficulty": "medium",
+        "estimated_days": 6,
+        "description": "Hệ thống quản lý thư viện với Spring Boot + Thymeleaf (hoặc REST API + React). Covers: CRUD phức tạp, business logic rõ ràng, report generation.",
+        "why_cv_worthy": "Clear business domain + complex rules (late fees, availability) + reporting = shows real-world Java skills.",
+        "tech_stack": {
+          "required": [
+            "Spring Boot",
+            "PostgreSQL",
+            "Spring Data JPA"
+          ],
+          "bonus": [
+            "Thymeleaf hoặc React frontend",
+            "iText / JasperReports (PDF)",
+            "Spring Scheduler (auto late fee calc)"
+          ]
+        },
+        "core_features": [
+          "Books: CRUD, categories, multiple copies tracking, search",
+          "Members: register, profile, borrowing history",
+          "Borrowing: checkout, return, extend deadline",
+          "Late fee calculation tự động (Spring Scheduler daily)",
+          "Availability check: how many copies available",
+          "Reports: most borrowed books, active members, overdue list",
+          "Export report PDF"
+        ],
+        "bonus_features": [
+          "QR code cho sách",
+          "Email reminder trước hạn trả",
+          "Reservation queue",
+          "Fine payment tracking"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Dashboard: KPI cards (total books, active loans, overdue count)",
+            "Book availability badge: Available/Borrowed/Reserved màu sắc rõ",
+            "Borrow/return flow rõ ràng: không quá 3 clicks",
+            "Overdue items highlighted đỏ trong danh sách",
+            "Search với instant results",
+            "Report page với filter ngày + export button",
+            "Responsive (nếu có frontend)"
+          ],
+          "nice_to_have": [
+            "Barcode/QR scan để checkout nhanh",
+            "Email notification template đẹp"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "ERD",
+            "Screenshots / Swagger link",
+            "Setup guide",
+            "Business rules explanation"
+          ],
+          "code_must_have": [
+            "Business logic in Service layer",
+            "Scheduler for late fees",
+            "Report generation",
+            "Tests"
+          ],
+          "deployment": "Railway",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "jv_003",
+        "title": "Event Booking Platform",
+        "tagline": "Tạo event, book tickets, QR check-in, dashboard",
+        "difficulty": "hard",
+        "estimated_days": 7,
+        "description": "Platform quản lý sự kiện: organizer tạo event, user mua vé, QR code check-in, organizer xem analytics. Demonstrates complex business domain với Java.",
+        "why_cv_worthy": "Event-driven domain với concurrency challenge (ticket inventory), QR generation, analytics — multi-dimensional skills.",
+        "tech_stack": {
+          "required": [
+            "Spring Boot",
+            "PostgreSQL",
+            "Spring Security"
+          ],
+          "bonus": [
+            "ZXing (QR code)",
+            "Redis (ticket locking)",
+            "WebSocket (check-in realtime)",
+            "Docker"
+          ]
+        },
+        "core_features": [
+          "Roles: Organizer và Attendee",
+          "Events: create với date/venue/capacity/ticket types/price",
+          "Booking: select tickets, checkout, receive QR code",
+          "Ticket inventory: optimistic locking để tránh oversell",
+          "QR check-in: organizer scan QR → validate + mark attended",
+          "Organizer dashboard: registrations, revenue, attendance rate",
+          "Email confirmation với QR attachment"
+        ],
+        "bonus_features": [
+          "Waitlist khi hết vé",
+          "Refund policy",
+          "Multi-day events",
+          "Stripe payment"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Event card: cover image, date, location, ticket price, spots left",
+            "Ticket selection UI: quantity picker + price update realtime",
+            "Booking confirmation page: QR code lớn + add to calendar button",
+            "Organizer dashboard: charts cho registrations over time",
+            "'Spots left' counter: đỏ khi < 10 còn lại",
+            "Check-in app (có thể là simple page): scan result instant feedback",
+            "Mobile-friendly (người check-in dùng phone)"
+          ],
+          "nice_to_have": [
+            "Countdown timer đến event",
+            "Social share event",
+            "Seat map cho theater-style events"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "System design explanation",
+            "Concurrency handling explanation",
+            "Setup + demo guide",
+            "Screenshots"
+          ],
+          "code_must_have": [
+            "Optimistic locking",
+            "QR generation",
+            "Email service",
+            "Role-based access"
+          ],
+          "deployment": "Railway",
+          "minimum_score_to_pass": 65
+        }
+      }
+    ]
+  },
+  "dotnet": {
+    "_match_keywords": [
+      "c#",
+      "csharp",
+      ".net",
+      "dotnet",
+      "asp.net",
+      "blazor",
+      "net developer"
+    ],
+    "artifacts": [
+      {
+        "id": "dn_001",
+        "title": "HR Management System với ASP.NET Core",
+        "tagline": "Employee CRUD, attendance, leave management, payroll basic",
+        "difficulty": "hard",
+        "estimated_days": 8,
+        "description": "Hệ thống quản lý nhân sự với ASP.NET Core Web API + React hoặc Blazor. Employee management, attendance tracking, leave requests, basic payroll. Enterprise-flavor project.",
+        "why_cv_worthy": ".NET HR system = directly applicable to enterprise clients (banking, insurance, enterprise software companies in VN).",
+        "tech_stack": {
+          "required": [
+            "ASP.NET Core 8",
+            "SQL Server hoặc PostgreSQL",
+            "Entity Framework Core"
+          ],
+          "bonus": [
+            "React frontend hoặc Blazor",
+            "SignalR",
+            "xUnit tests",
+            "Docker",
+            "Swagger"
+          ]
+        },
+        "core_features": [
+          "Auth: JWT với roles (Admin/HR/Employee)",
+          "Employees: CRUD, department, position, personal info",
+          "Attendance: check-in/out, monthly summary, overtime calc",
+          "Leave management: request, approve/reject, balance tracking",
+          "Basic payroll: base salary + overtime + deductions",
+          "Reports: monthly attendance, leave balance, department headcount",
+          "Org chart visualization"
+        ],
+        "bonus_features": [
+          "SignalR realtime notifications",
+          "Document upload (contracts)",
+          "Performance review",
+          "Export Excel/PDF"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Dashboard: headcount, pending leaves, today's attendance KPIs",
+            "Employee list: filterable, searchable, status badges",
+            "Leave request flow: calendar view để chọn ngày",
+            "Attendance table: color-coded (on-time/late/absent)",
+            "Payroll slip layout professional (PDF export)",
+            "Approval notifications badge",
+            "Role-appropriate navigation (HR thấy nhiều hơn Employee)"
+          ],
+          "nice_to_have": [
+            "Org chart interactive (click để xem profile)",
+            "Birthday notifications",
+            "Team calendar view"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Architecture",
+            "ERD",
+            "Setup guide",
+            "Screenshots với cả 3 roles"
+          ],
+          "code_must_have": [
+            "Clean architecture layers",
+            "Repository pattern",
+            "Validation FluentValidation",
+            "At least 10 tests"
+          ],
+          "deployment": "Azure App Service free / Railway",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "dn_002",
+        "title": "Inventory Management System",
+        "tagline": "Quản lý kho: nhập/xuất, tồn kho, cảnh báo, báo cáo",
+        "difficulty": "medium",
+        "estimated_days": 6,
+        "description": "Hệ thống quản lý kho hàng với ASP.NET Core. Import/export transactions, real-time inventory levels, low stock alerts, comprehensive reporting.",
+        "why_cv_worthy": "Inventory is evergreen enterprise domain. Transaction-heavy system shows data integrity + business logic skills.",
+        "tech_stack": {
+          "required": [
+            "ASP.NET Core",
+            "SQL Server / PostgreSQL",
+            "EF Core"
+          ],
+          "bonus": [
+            "React / Blazor / Razor Pages",
+            "SignalR (low stock alerts)",
+            "ClosedXML (Excel export)"
+          ]
+        },
+        "core_features": [
+          "Products/SKUs: CRUD, categories, units, barcode",
+          "Warehouses: multiple warehouse support",
+          "Transactions: nhập kho (import), xuất kho (export), chuyển kho",
+          "Real-time inventory: current stock per product per warehouse",
+          "Low stock alerts: tự động khi dưới threshold",
+          "Reports: stock movement, transaction history, inventory valuation",
+          "Export Excel"
+        ],
+        "bonus_features": [
+          "Barcode scanning",
+          "Supplier management",
+          "Purchase orders",
+          "FIFO/LIFO costing"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Inventory dashboard: total SKUs, total value, low stock count",
+            "Stock level indicators: màu (xanh/vàng/đỏ) theo mức tồn",
+            "Transaction form: product search với autocomplete",
+            "Low stock alert banner prominent trên dashboard",
+            "Transaction history table với filter ngày + type",
+            "Báo cáo page với date range picker + export button",
+            "Print-friendly transaction receipt"
+          ],
+          "nice_to_have": [
+            "Barcode input support",
+            "Batch import từ Excel",
+            "Stock movement chart theo thời gian"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "ERD",
+            "Business rules (FIFO/stock calc)",
+            "Screenshots",
+            "Setup guide"
+          ],
+          "code_must_have": [
+            "Transaction integrity (DB transaction)",
+            "Stock calculation logic",
+            "Alert system",
+            "Excel export"
+          ],
+          "deployment": "Azure / Railway",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "dn_003",
+        "title": "Online Quiz & Exam Platform",
+        "tagline": "Tạo đề thi, thi online, auto-grade, analytics",
+        "difficulty": "medium",
+        "estimated_days": 5,
+        "description": "Platform thi online với ASP.NET Core. Teacher tạo đề, student thi có timer, auto chấm điểm, teacher xem analytics kết quả.",
+        "why_cv_worthy": "Timer + anti-cheat + auto-grading + analytics = multiple technical challenges in one clean domain.",
+        "tech_stack": {
+          "required": [
+            "ASP.NET Core",
+            "PostgreSQL / SQL Server",
+            "SignalR (timer sync)"
+          ],
+          "bonus": [
+            "React frontend",
+            "iTextSharp (result PDF)",
+            "Chart.js / ApexCharts"
+          ]
+        },
+        "core_features": [
+          "Roles: Teacher và Student",
+          "Question bank: multiple choice, true/false, short answer",
+          "Exam builder: pick questions, set time limit, randomize",
+          "Taking exam: countdown timer sync với server, submit on expire",
+          "Auto-grading: MCQ tự động, short answer manual",
+          "Results: score, time taken, per-question breakdown",
+          "Analytics: score distribution, difficulty per question, class average"
+        ],
+        "bonus_features": [
+          "Anti-cheat: tab switch detection",
+          "Question import từ Word/Excel",
+          "Certificate PDF",
+          "Retake policy"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Countdown timer prominent (đỏ khi < 5 phút)",
+            "Question navigator: xem tất cả câu, highlight answered/unanswered",
+            "Auto-save answer mỗi 30s (không mất khi reload)",
+            "Submit confirmation dialog với warning chưa trả lời",
+            "Results page: score big + pass/fail badge + time taken",
+            "Per-question review: đúng/sai explanation",
+            "Teacher analytics: bar chart score distribution"
+          ],
+          "nice_to_have": [
+            "Fullscreen lock khi đang thi",
+            "Flag question để review lại",
+            "Cheating detection log cho teacher"
+          ]
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Screenshots (exam taking + results)",
+            "Setup guide",
+            "Teacher + student demo credentials"
+          ],
+          "code_must_have": [
+            "Server-side timer validation",
+            "Auto-save logic",
+            "Grading algorithm",
+            "SignalR timer sync"
+          ],
+          "deployment": "Azure / Railway",
+          "minimum_score_to_pass": 65
+        }
+      }
+    ]
+  },
+  "uiux": {
+    "_match_keywords": [
+      "ui",
+      "ux",
+      "ui/ux",
+      "ui ux",
+      "product designer",
+      "interaction designer",
+      "visual designer",
+      "figma",
+      "design",
+      "user experience",
+      "user interface"
+    ],
+    "artifacts": [
+      {
+        "id": "ux_001",
+        "title": "Mobile App Redesign Case Study",
+        "tagline": "Redesign một app thực tế: research → wireframe → prototype",
+        "difficulty": "medium",
+        "estimated_days": 7,
+        "description": "Chọn một app phổ biến có UX kém (banking app, government site, v.v.) và thực hiện full redesign process: user research, pain points, wireframe, hi-fi prototype, usability testing. Deliver dưới dạng Figma file + case study document.",
+        "why_cv_worthy": "Shows end-to-end design thinking process — không chỉ làm đẹp mà còn giải quyết real UX problems. Đây là portfolio piece số 1 recruiter muốn xem.",
+        "tech_stack": {
+          "required": [
+            "Figma (prototype)",
+            "Maze hoặc Useberry (usability testing)",
+            "Google Forms / Typeform (user research survey)"
+          ],
+          "bonus": [
+            "Notion / Confluence (documentation)",
+            "Miro (affinity mapping)",
+            "Lottie (micro-animation spec)"
+          ]
+        },
+        "core_features": [
+          "User Research: survey 5+ người thực, tổng hợp pain points",
+          "Competitive Analysis: so sánh 3 apps tương tự",
+          "Information Architecture: sitemap + user flow mới",
+          "Wireframes: low-fi cho tất cả màn hình chính (10+ screens)",
+          "Hi-Fi Prototype: design system + full clickable prototype trên Figma",
+          "Usability Testing: test với 3+ người, ghi lại findings",
+          "Before/After comparison rõ ràng với rationale"
+        ],
+        "bonus_features": [
+          "Motion design spec cho transitions",
+          "Accessibility audit (WCAG 2.1)",
+          "Dark mode variant",
+          "Design handoff với developer notes"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Design system đầy đủ: color palette, typography scale, component library (buttons, inputs, cards, navigation)",
+            "8pt grid system nhất quán trên toàn bộ design",
+            "Auto Layout trong Figma để components responsive",
+            "Prototype có flow hoàn chỉnh (không phải chỉ vài màn hình rời)",
+            "Annotation layer giải thích UX decisions",
+            "Spacing & sizing theo design system (không hardcode random số)",
+            "Contrast ratio đạt AA (4.5:1 cho text thường)",
+            "Realistic content — không dùng 'Lorem ipsum' trong final design"
+          ],
+          "nice_to_have": [
+            "Micro-interactions documented (hover states, loading states, empty states)",
+            "Responsive variants (mobile + tablet + desktop)",
+            "Accessibility annotations (screen reader flow, focus order)"
+          ],
+          "design_reference": "Tham khảo case studies trên: UX Collective, Bootcamp Medium, Muzli"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Figma link (view access)",
+            "Case study PDF hoặc Notion page",
+            "Problem statement rõ ràng",
+            "Research findings summary",
+            "Design decisions rationale"
+          ],
+          "deliverables_must_have": [
+            "Clickable Figma prototype",
+            "Design system component library",
+            "Before/After screenshots",
+            "Usability testing results"
+          ],
+          "deployment": "Figma Community publish + Behance / Notion portfolio page",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "ux_002",
+        "title": "Design System từ Đầu",
+        "tagline": "Build component library hoàn chỉnh + documentation site",
+        "difficulty": "hard",
+        "estimated_days": 8,
+        "description": "Xây dựng design system từ đầu cho một brand tưởng tượng hoặc thực tế: foundations (color, typography, spacing, iconography) đến components (atoms → molecules → organisms), có documentation site để present.",
+        "why_cv_worthy": "Design system skill = senior-level signal. Fresh grad biết build design system sẽ nổi bật hoàn toàn so với các ứng viên khác.",
+        "tech_stack": {
+          "required": [
+            "Figma (design + component library)",
+            "Storybook hoặc ZeroHeight (documentation)"
+          ],
+          "bonus": [
+            "Figma Variables (cho theming)",
+            "HTML/CSS cơ bản (để export tokens)",
+            "Style Dictionary (design tokens)"
+          ]
+        },
+        "core_features": [
+          "Brand foundations: color palette (primary, secondary, semantic, neutral), typography scale (heading 1-6, body, caption), spacing scale (4/8pt grid), border radius, shadows",
+          "Iconography: ít nhất 30 icons nhất quán về style",
+          "Component library Atoms: Button (variants + states), Input, Checkbox, Radio, Toggle, Badge, Avatar, Tag",
+          "Component library Molecules: Card, Modal, Toast/Snackbar, Tooltip, Dropdown, Search bar",
+          "Component library Organisms: Navbar, Sidebar, Data table, Form layout",
+          "Dark mode: toàn bộ components có dark variant",
+          "Documentation: usage guidelines, do/don't examples, accessibility notes cho mỗi component"
+        ],
+        "bonus_features": [
+          "Design tokens exported as JSON/CSS variables",
+          "Animation tokens (duration, easing)",
+          "Figma plugin để enforce spacing",
+          "Contribution guidelines"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Figma Auto Layout cho TẤT CẢ components (không static)",
+            "Component variants đầy đủ: size (sm/md/lg), state (default/hover/active/disabled/focus), type",
+            "Figma Variables cho color tokens (light + dark mode)",
+            "Consistent naming convention: BEM-style hoặc Atomic Design",
+            "Published to Figma Community hoặc shared link",
+            "Documentation page cho mỗi component: usage, anatomy, props, do/don't",
+            "Real-world example: landing page hoặc dashboard dùng design system này"
+          ],
+          "nice_to_have": [
+            "Motion guidelines: easing curves, duration scale",
+            "Figma plugin hoặc linting rules",
+            "React component code snippets kèm theo (collaboration với dev)"
+          ],
+          "design_reference": "Tham khảo: Material Design 3, Atlassian Design System, Carbon (IBM), Ant Design"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Figma link với full access",
+            "Storybook/documentation site link",
+            "Design principles document",
+            "Component count + coverage"
+          ],
+          "deliverables_must_have": [
+            "Published component library",
+            "Documentation site live",
+            "Dark mode demo",
+            "Real-world application example"
+          ],
+          "deployment": "Storybook deploy lên Vercel / ZeroHeight free plan + Figma Community",
+          "minimum_score_to_pass": 65
+        }
+      },
+      {
+        "id": "ux_003",
+        "title": "End-to-End Product Design: SaaS Dashboard",
+        "tagline": "Design + prototype SaaS analytics dashboard từ 0",
+        "difficulty": "hard",
+        "estimated_days": 9,
+        "description": "Design toàn bộ một SaaS product — từ defining user personas, user stories, đến full hi-fi UI cho dashboard, onboarding flow, và settings. Thể hiện product thinking + visual design skills.",
+        "why_cv_worthy": "SaaS dashboard = complex information architecture + data visualization + multi-state UI. Demonstrates product designer level thinking, không chỉ visual.",
+        "tech_stack": {
+          "required": [
+            "Figma",
+            "FigJam (user journey mapping)"
+          ],
+          "bonus": [
+            "Maze (usability test)",
+            "Lottie (animation spec)",
+            "Whimsical (flowcharts)"
+          ]
+        },
+        "core_features": [
+          "Discovery: 2 user personas với goals, pain points, tech savviness",
+          "User Journey Map: onboarding flow + core task flow",
+          "Information Architecture: navigation structure, content hierarchy",
+          "Onboarding flow: empty state → first value (5-7 screens)",
+          "Main Dashboard: KPI cards, charts (line/bar/pie), activity feed, filters",
+          "Detail pages: ít nhất 3 sub-pages (vd: Reports, Users, Settings)",
+          "Responsive: desktop (1440px) + tablet (768px) layouts",
+          "Micro-interactions: loading states, success states, error states, empty states cho mọi component"
+        ],
+        "bonus_features": [
+          "Mobile companion app (3-5 screens)",
+          "Email notification templates",
+          "CLI/API documentation design",
+          "White-label theming"
+        ],
+        "ui_ux_requirements": {
+          "must_have": [
+            "Data visualization đẹp và đúng: chart type phù hợp với data type",
+            "Information hierarchy rõ ràng: F-pattern hoặc Z-pattern reading flow",
+            "Navigation: breadcrumb, active states, hover states đầy đủ",
+            "Table design: sortable headers, row hover, pagination, bulk actions",
+            "Form design: inline validation, helper text, character count khi cần",
+            "Empty states: illustration + call-to-action (không để trắng)",
+            "Error states: 404, 500, no data, no connection — tất cả đều có design",
+            "Skeleton loading screens cho tất cả heavy content areas"
+          ],
+          "nice_to_have": [
+            "Customizable dashboard (drag-drop widgets)",
+            "Notification center design",
+            "Keyboard shortcut overlay (như Linear, Figma)"
+          ],
+          "design_reference": "Tham khảo: Linear, Vercel Dashboard, Stripe Dashboard, Retool"
+        },
+        "cv_ready_criteria": {
+          "readme_must_have": [
+            "Figma prototype link",
+            "Case study: problem → solution",
+            "User personas",
+            "Design decisions log",
+            "Prototype walkthrough video (Loom)"
+          ],
+          "deliverables_must_have": [
+            "Full clickable prototype (onboarding + core flow)",
+            "Design system components used",
+            "Responsive variants",
+            "All states documented"
+          ],
+          "deployment": "Figma prototype + Behance / personal portfolio site",
+          "minimum_score_to_pass": 65
+        }
+      }
+    ]
+  }
+}
